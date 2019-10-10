@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/OlivierVerhaegen/PM1904-Backend/issues"
   },
-  "homepage": "https://github.com/OlivierVerhaegen/PM1904-Backend#readme"
+  "homepage": "https://github.com/OlivierVerhaegen/PM1904-Backend#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
