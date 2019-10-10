@@ -1,0 +1,19 @@
+{
+  "name": "pm1904-backend",
+  "version": "1.0.0",
+  "description": "HAP Cafetaria order service backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OlivierVerhaegen/PM1904-Backend.git"
+  },
+  "author": "PM1904",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OlivierVerhaegen/PM1904-Backend/issues"
+  },
+  "homepage": "https://github.com/OlivierVerhaegen/PM1904-Backend#readme"
+}
