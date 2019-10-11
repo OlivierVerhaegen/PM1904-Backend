@@ -23,7 +23,7 @@ router.get('/products', (req, res) => {
     const queryString = 'SELECT * FROM products';
     getSQLConnection().query(queryString, (err, rows, fields) => {
         if (err) {
-            logger.error('ERROR: Failed to get products from database.');
+            logger.error('Failed to get products from database.');
             res.sendStatus(500);
             return;
         }
@@ -38,7 +38,7 @@ router.get('/products/:id', (req, res) => {
     const queryString = 'SELECT * FROM products WHERE id = ?';
     getSQLConnection().query(queryString, [req.params.id], (err, rows, fields) => {
         if (err) {
-            logger.error('ERROR: Failed to get products from database.');
+            logger.error('Failed to get products from database.');
             res.sendStatus(500);
             return;
         }

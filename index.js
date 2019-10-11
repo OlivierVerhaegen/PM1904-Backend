@@ -16,7 +16,7 @@ app.use(productsRoute);
 
 // Respond to root.
 app.get('/', (req, res) => {
-    logger.warn('WARN: Someone is trying to access the root route.');
+    logger.warn('Someone is trying to access the root route.');
     res.status(404).send();
 });
 
