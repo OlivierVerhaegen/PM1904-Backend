@@ -5,19 +5,18 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const logger = require('./logger');
 
-const productsRoute = require('./routes/products');
+const routes = require('./routes');
 
 const app = express();
 
-app.use(express.static('./public'));
 app.use(morgan('short'));
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(productsRoute);
+app.use(routes);
 
 // Respond to root.
 app.get('/', (req, res) => {
     logger.warn('Someone is trying to access the root route.');
-    res.status(404).send();
+    res.sendFile(__dirname + '/public/index.html');
 });
 
 

@@ -17,7 +17,7 @@ function getSQLConnection() {
 }
 //----------------------------------------------------
 
-router.get('/products', (req, res) => {
+router.get('/', (req, res) => {
     logger.log('Getting products from database...');
 
     const queryString = 'SELECT * FROM products';
@@ -32,7 +32,7 @@ router.get('/products', (req, res) => {
     });
 });
 
-router.get('/products/:id', (req, res) => {
+router.get('/:id', (req, res) => {
     logger.log(`Getting product ${req.params.id} from database...`);
 
     const queryString = 'SELECT * FROM products WHERE id = ?';
@@ -47,7 +47,7 @@ router.get('/products/:id', (req, res) => {
     });
 });
 
-router.post('/products/create', (req, res) => {
+router.post('/create', (req, res) => {
     logger.log('Creating user' + req.body.name);
 
     const queryString = 'INSERT INTO products (name, available, price) VALUES (?, ?, ?)';
