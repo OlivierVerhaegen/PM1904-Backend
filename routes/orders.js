@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get(':id', (req, res) => {
+router.get('/:id', (req, res) => {
     logger.log(`Getting order ${req.params.id} from database ...`)
 
     const queryString = 'SELECT * FROM orders WHERE id = ?';
@@ -42,7 +42,7 @@ router.get(':id', (req, res) => {
 //                                         POST REQUESTS
 //--------------------------------------------------------------------------------------
 router.post('/create', (req, res) => {
-    logger.log('Creating order' + req.body.orderNumber);
+    logger.log('Creating order ' + req.body.orderNumber);
 
     const queryString = 'INSERT INTO orders (orderNumber, products, subtotal) VALUES (?, ?, ?)';
     SQLConnection().query(
@@ -50,27 +50,69 @@ router.post('/create', (req, res) => {
         [   req.body.orderNumber,
             req.body.products,
             req.body.subtotal
-        ], (err, result, fields) => {
+        ],
+        (err, result, fields) => {
             if (err) {
-                logger.error('Failed to insert new user: ' + err);
+                logger.error('Failed to insert new order: ' + err);
                 res.sendStatus(500);
                 return;
             } 
 
             logger.log('Inserted new order with id: ' + result.insertId)
-        });
+        }
+    );
     
-    res.sendStatus(200);
+    res.sendStatus(201);
 })
 
 //--------------------------------------------------------------------------------------
 //                                         UPDATE REQUESTS
 //--------------------------------------------------------------------------------------
+router.patch('/:id', (req, res) => {
+    logger.log('Updating order with id: ' + req.params.id);
 
+    const queryString = 'UPDATE orders SET orderNumber = ?, products = ?, subtotal = ? WHERE id = ?';
+    SQLConnection().query(
+      queryString,
+      [
+          req.body.orderNumber,
+          req.body.products,
+          req.body.subtotal,
+          req.params.id
+      ],
+      (err, result, fields) => {
+          if (err) {
+              logger.error('Failed to update order with id: ' + req.params.id)
+              res.sendStatus(500);
+              return;
+          }
+
+          logger.log('Updated order with id: ' + req.params.id);
+      }
+    );
+
+    res.sendStatus(200);
+});
 
 
 //--------------------------------------------------------------------------------------
 //                                         DELETE REQUESTS
 //--------------------------------------------------------------------------------------
+router.delete('/:id', (req, res) => {
+    logger.log('Deleting order with id: ' + req.params.id);
+
+    const queryString = 'DELETE FROM orders WHERE id = ?';
+    SQLConnection().query(queryString, [req.params.id], (err, reslut, fields) => {
+        if (err) {
+            logger.error('Failed to delete order with id: ' + req.params.id);
+            res.sendStatus(500);
+            return;
+        }
+
+        logger.log('Deleted order with id: ' + req.params.id);
+    });
+
+    res.sendStatus(200);
+});
 
 module.exports = router;
