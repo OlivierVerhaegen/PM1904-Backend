@@ -28,7 +28,7 @@ router.get('/:id', (req, res) => {
     const queryString = 'SELECT * FROM products WHERE id = ?';
     SQLConnection().query(queryString, [req.params.id], (err, rows, fields) => {
         if (err) {
-            logger.error('Failed to get products from database.');
+            logger.error('Failed to get product from database.');
             res.sendStatus(500);
             return;
         }
@@ -55,14 +55,12 @@ router.post('/create', (req, res) => {
                 logger.error('Failed to insert new user: ' + err);
                 res.sendStatus(500);
                 return;
-            }
-
-            //TODO: Insert product into database. 
+            } 
 
             logger.log('Inserted new product with id: ' + result.insertId)
         });
     
-    res.end();
+    res.sendStatus(200);
 });
 
 
