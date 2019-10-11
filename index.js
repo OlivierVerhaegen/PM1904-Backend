@@ -2,7 +2,6 @@ const http = require('http');
 const https = require('https');
 const express = require('express');
 const morgan = require('morgan');
-const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const logger = require('./logger');
 
@@ -10,10 +9,10 @@ const productsRoute = require('./routes/products');
 
 const app = express();
 
-app.use(productsRoute);
 app.use(express.static('./public'));
 app.use(morgan('short'));
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(productsRoute);
 
 // Respond to root.
 app.get('/', (req, res) => {
