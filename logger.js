@@ -1,7 +1,7 @@
 const colors = require('colors');
 
 module.exports = {
-    log: (message) => {
+    info: (message) => {
         console.log(`LOG: ${message}`.blue);
     },
     warn: (message) => {
@@ -9,5 +9,8 @@ module.exports = {
     },
     error: (message) => {
         console.error(`ERROR: ${message}`.red);
+    },
+    success: (message) => {
+        console.log(`SUCCESS: ${message}`.green);
     }
 }

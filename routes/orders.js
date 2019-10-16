@@ -44,12 +44,12 @@ router.get('/:id', (req, res) => {
 router.post('/create', (req, res) => {
     logger.log('Creating order ' + req.body.orderNumber);
 
-    const queryString = 'INSERT INTO orders (orderNumber, productId, studentId) VALUES (?, ?, ?)';
+    const queryString = 'INSERT INTO orders (orderNumber, productId, userId) VALUES (?, ?, ?)';
     SQLConnection().query(
         queryString,
         [   req.body.orderNumber,
-            req.body.products,
-            req.body.subtotal
+            req.body.productId,
+            req.body.userId
         ],
         (err, result, fields) => {
             if (err) {
@@ -58,11 +58,10 @@ router.post('/create', (req, res) => {
                 return;
             } 
 
-            logger.log('Inserted new order with id: ' + result.insertId)
+            logger.success('Inserted new order with id: ' + result.insertId);
+            res.sendStatus(201);
         }
     );
-    
-    res.sendStatus(201);
 })
 
 //--------------------------------------------------------------------------------------
@@ -87,11 +86,10 @@ router.patch('/:id', (req, res) => {
               return;
           }
 
-          logger.log('Updated order with id: ' + req.params.id);
+          logger.success('Updated order with id: ' + req.params.id);
+          res.sendStatus(200);
       }
     );
-
-    res.sendStatus(200);
 });
 
 
@@ -109,10 +107,9 @@ router.delete('/:id', (req, res) => {
             return;
         }
 
-        logger.log('Deleted order with id: ' + req.params.id);
+        logger.success('Deleted order with id: ' + req.params.id);
+        res.sendStatus(200);
     });
-
-    res.sendStatus(200);
 });
 
 module.exports = router;

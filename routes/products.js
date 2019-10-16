@@ -8,7 +8,7 @@ const SQLConnection = require('../database');
 //                                         GET REQUESTS
 //--------------------------------------------------------------------------------------
 router.get('/', (req, res) => {
-    logger.log('Getting products from database...');
+    logger.info('Getting products from database...');
 
     const queryString = 'SELECT * FROM products';
     SQLConnection().query(queryString, (err, rows, fields) => {
@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-    logger.log(`Getting product ${req.params.id} from database...`);
+    logger.info(`Getting product ${req.params.id} from database...`);
 
     const queryString = 'SELECT * FROM products WHERE id = ?';
     SQLConnection().query(queryString, [req.params.id], (err, rows, fields) => {
@@ -42,9 +42,15 @@ router.get('/:id', (req, res) => {
 //                                         POST REQUESTS
 //--------------------------------------------------------------------------------------
 router.post('/create', (req, res) => {
-    logger.log('Creating product' + req.body.name);
-    // TODO: fix checkbox value (is undefiend wanneer niet gechecked).
-    logger.log(req.body.available)
+    logger.info('Creating product: ' + req.body.name);
+
+    // Convert checkbox value to boolean.
+    if (req.body.available == 'on') {
+        req.body.available = true;
+    } else {
+        req.body.available = false;
+    }
+
     const queryString = 'INSERT INTO products (name, price, photoUrl, allergens, description, available) VALUES (?, ?, ?, ?, ?, ?)';
     SQLConnection().query(
         queryString,
@@ -61,7 +67,7 @@ router.post('/create', (req, res) => {
                 return;
             } 
 
-            logger.log('Inserted new product with id: ' + result.insertId)
+            logger.success('Inserted new product with id: ' + result.insertId)
             res.sendStatus(201);
         });
 });
@@ -71,7 +77,7 @@ router.post('/create', (req, res) => {
 //                                         UPDATE REQUESTS
 //--------------------------------------------------------------------------------------
 router.patch('/:id', (req, res) => {
-    logger.log('Updating product with id: ' + req.params.id);
+    logger.info('Updating product with id: ' + req.params.id);
 
     const queryString = 'UPDATE products SET name = ?, available = ?, price = ? WHERE id = ?';
     SQLConnection().query(
@@ -89,18 +95,17 @@ router.patch('/:id', (req, res) => {
                 return;
             }
 
-            logger.log('Updated product with id: ' + req.params.id);
+            logger.success('Updated product with id: ' + req.params.id);
+            res.sendStatus(200);
         }
     );
-
-    res.sendStatus(200);
 });
 
 //--------------------------------------------------------------------------------------
 //                                         DELETE REQUESTS
 //--------------------------------------------------------------------------------------
 router.delete('/:id', (req, res) => {
-    logger.log('Deleting product with id: ' + req.params.id);
+    logger.info('Deleting product with id: ' + req.params.id);
 
     const queryString = 'DELETE FROM products WHERE id = ?';
     SQLConnection().query(queryString, [req.params.id], (err, result, fields) => {
@@ -110,10 +115,9 @@ router.delete('/:id', (req, res) => {
             return;
         }
 
-        logger.log('Deleted product with id: ' + req.params.id);
+        logger.success('Deleted product with id: ' + req.params.id);
+        res.sendStatus(200);
     });
-
-    res.sendStatus(200);
 });
 
 module.exports = router;
