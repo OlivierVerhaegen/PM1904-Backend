@@ -10,11 +10,18 @@
             justify-content: center;
         }
         h1 {
-            font-size: 8rem;
+            font-size: 2rem;
         }
     </style>
 </head>
 <body>
     <h1>Server is up and running.</h1>
+
+    <form action="/products/create" method="post">
+        <input type="text" name="name" id="name">
+        <input type="checkbox" name="available" id="available">
+        <input type="number" name="price" id="price">
+        <button type="submit">Maak product</button>
+    </form>
 </body>
 </html>
