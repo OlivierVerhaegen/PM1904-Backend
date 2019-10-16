@@ -67,7 +67,7 @@ router.post('/create', (req, res) => {
                 return;
             } 
 
-            logger.info('Inserted new product with id: ' + result.insertId)
+            logger.success('Inserted new product with id: ' + result.insertId)
             res.sendStatus(201);
         });
 });
@@ -95,7 +95,7 @@ router.patch('/:id', (req, res) => {
                 return;
             }
 
-            logger.info('Updated product with id: ' + req.params.id);
+            logger.success('Updated product with id: ' + req.params.id);
         }
     );
 
@@ -116,7 +116,7 @@ router.delete('/:id', (req, res) => {
             return;
         }
 
-        logger.info('Deleted product with id: ' + req.params.id);
+        logger.success('Deleted product with id: ' + req.params.id);
     });
 
     res.sendStatus(200);

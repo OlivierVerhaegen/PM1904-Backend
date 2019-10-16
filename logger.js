@@ -9,5 +9,8 @@ module.exports = {
     },
     error: (message) => {
         console.error(`ERROR: ${message}`.red);
+    },
+    success: (message) => {
+        console.log(`SUCCESS: ${message}`.green);
     }
 }

@@ -58,7 +58,7 @@ router.post('/create', (req, res) => {
                 return;
             } 
 
-            logger.log('Inserted new order with id: ' + result.insertId)
+            logger.success('Inserted new order with id: ' + result.insertId)
         }
     );
     
@@ -87,7 +87,7 @@ router.patch('/:id', (req, res) => {
               return;
           }
 
-          logger.log('Updated order with id: ' + req.params.id);
+          logger.success('Updated order with id: ' + req.params.id);
       }
     );
 
@@ -109,7 +109,7 @@ router.delete('/:id', (req, res) => {
             return;
         }
 
-        logger.log('Deleted order with id: ' + req.params.id);
+        logger.success('Deleted order with id: ' + req.params.id);
     });
 
     res.sendStatus(200);
