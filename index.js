@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 
 
 http.createServer(app).listen(9000, () => {
-    logger.log("Server is up an listening on http://localhost:9000");
+    logger.info("Server is up an listening on http://localhost:9000");
 });
 
 // https://stackoverflow.com/questions/11744975/enabling-https-on-express-js
