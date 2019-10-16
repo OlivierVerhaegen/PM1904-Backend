@@ -4,27 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
-        body {
-            display: flex;
-            justify-content: center;
+        .container{
+            background-color: #e9ecef;
+            height: 100%;
+        } 
+        input{
+            border-radius: 3px;
         }
-        h1 {
-            font-size: 2rem;
+        @media (min-width: 768px) {
+        .custom-control{
+            padding-top: 2.3rem;
+        }}
+        .display-8{
+            font-weight: 600;
+        }
+        .col-sm-12{
+            margin-top: -3vh;
         }
     </style>
 </head>
 <body>
-    <h1>Server is up and running.</h1>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <a class="navbar-brand" href="index.html">HAP - Backend</a>                   
+                    
+                <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" >Server is up and running.</a>
+                        </li>
+                </div>
+            </nav>
+    <!-- <h1>Server is up and running.</h1> -->
+    <div class="container">
+            <br>
+            <h4 class="display-8">Voeg producten toe aan HAP.</h4>
+            <hr>
+            <form action="/products/create" method="post">
+                <!-- <div class="form-group"> -->
+                    <div class="row">
+                <div class="col-md-6">
+                    <label for="name">Naam</label>
+                    <input type="text" name="name" id="name" placeholder="Naam" class="form-control mb-4">
+                <!-- </div> -->
+                </div>
+                <div class="col-md-6">
+                <div class="custom-control custom-checkbox mb-4">
+                        <input type="checkbox" name="available" id="available" class="custom-control-input">
+                        <label class="custom-control-label" for="available">Beschikbaar?</label>
+                </div>
+                </div>
+                <div class="col-md-6">
+                        <label for="price">Prijs (€)</label>
+                    <input type="number" name="price" id="price" placeholder="Prijs"  class="form-control mb-4">
+                </div>
+                <div class="col-md-6">
+                    <label for="photoUrl">Foto-url</label>
+                    <input type="url" name="photoUrl" id="photoUrl" placeholder="Foto url" class="form-control mb-4">
+                </div>
+                <div class="col-md-6">
+                    <label for="allergens">Allergenen</label>
+                    <textarea name="allergens" id="allergens" placeholder="Allergenen" cols="30" rows="10" class="form-control mb-4"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label for="description">Beschrijving</label>
+                    <textarea name="description" id="description" placeholder="Beschrijving" cols="30" rows="10" class="form-control mb-4"></textarea>
+                </div>
+                <div class="col-sm-12">
+                    <button type="submit" class="btn btn-info btn-block my-3">Maak product</button>
+                </div>
+            </div>
+            </form>
+        </div>
 
-    <form action="/products/create" method="post">
-        <input type="text" name="name" id="name" placeholder="Naam">
-        <input type="checkbox" name="available" id="available">Beschikbaar?
-        <input type="number" name="price" id="price" placeholder="Prijs">
-        <input type="url" name="photoUrl" id="photoUrl" placeholder="Foto url">
-        <textarea name="allergens" id="allergens" placeholder="Allergenen" cols="30" rows="10"></textarea>
-        <textarea name="description" id="description" placeholder="Beschrijving" cols="30" rows="10"></textarea>
-        <button type="submit">Maak product</button>
-    </form>
+    
 </body>
 </html>
