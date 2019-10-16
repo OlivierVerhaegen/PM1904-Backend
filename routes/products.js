@@ -44,12 +44,14 @@ router.get('/:id', (req, res) => {
 router.post('/create', (req, res) => {
     logger.log('Creating product' + req.body.name);
 
-    const queryString = 'INSERT INTO products (name, available, price) VALUES (?, ?, ?)';
+    const queryString = 'INSERT INTO products (name, available, price, photoUrl, allergens) VALUES (?, ?, ?, ?, ?)';
     SQLConnection().query(
         queryString,
         [   req.body.name,
             req.body.available,
-            req.body.price
+            req.body.price,
+            req.body.photoUrl,
+            req.body.allergens
         ], (err, result, fields) => {
             if (err) {
                 logger.error('Failed to insert new user: ' + err);
