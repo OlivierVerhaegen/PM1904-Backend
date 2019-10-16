@@ -44,12 +44,12 @@ router.get('/:id', (req, res) => {
 router.post('/create', (req, res) => {
     logger.log('Creating order ' + req.body.orderNumber);
 
-    const queryString = 'INSERT INTO orders (orderNumber, productId, studentId) VALUES (?, ?, ?)';
+    const queryString = 'INSERT INTO orders (orderNumber, productId, userId) VALUES (?, ?, ?)';
     SQLConnection().query(
         queryString,
         [   req.body.orderNumber,
-            req.body.products,
-            req.body.subtotal
+            req.body.productId,
+            req.body.userId
         ],
         (err, result, fields) => {
             if (err) {
