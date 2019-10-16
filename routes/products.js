@@ -96,10 +96,9 @@ router.patch('/:id', (req, res) => {
             }
 
             logger.success('Updated product with id: ' + req.params.id);
+            res.sendStatus(200);
         }
     );
-
-    res.sendStatus(200);
 });
 
 //--------------------------------------------------------------------------------------
@@ -117,9 +116,8 @@ router.delete('/:id', (req, res) => {
         }
 
         logger.success('Deleted product with id: ' + req.params.id);
+        res.sendStatus(200);
     });
-
-    res.sendStatus(200);
 });
 
 module.exports = router;
