@@ -62,7 +62,7 @@ router.post('/create', (req, res) => {
             req.body.available
         ], (err, result, fields) => {
             if (err) {
-                logger.error('Failed to insert new user: ' + err);
+                logger.error('Failed to insert new product: ' + err);
                 res.sendStatus(500);
                 return;
             } 
