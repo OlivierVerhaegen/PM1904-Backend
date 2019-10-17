@@ -54,12 +54,12 @@ router.post('/create', (req, res) => {
         (err, result, fields) => {
             if (err) {
                 logger.error('Failed to insert new order: ' + err);
-                res.sendStatus(500);
+                res.status(500).redirect('/?status=error');
                 return;
             } 
 
             logger.success('Inserted new order with id: ' + result.insertId);
-            res.sendStatus(201);
+            res.status(201).redirect('/?status=success');
         }
     );
 })
@@ -82,12 +82,12 @@ router.patch('/:id', (req, res) => {
       (err, result, fields) => {
           if (err) {
               logger.error('Failed to update order with id: ' + req.params.id)
-              res.sendStatus(500);
+              res.status(500).redirect('/?status=error');
               return;
           }
 
           logger.success('Updated order with id: ' + req.params.id);
-          res.sendStatus(200);
+          res.status(200).redirect('/?status=success');
       }
     );
 });
@@ -103,12 +103,12 @@ router.delete('/:id', (req, res) => {
     SQLConnection().query(queryString, [req.params.id], (err, reslut, fields) => {
         if (err) {
             logger.error('Failed to delete order with id: ' + req.params.id);
-            res.sendStatus(500);
+            res.status(500).redirect('/?status=error');
             return;
         }
 
         logger.success('Deleted order with id: ' + req.params.id);
-        res.sendStatus(200);
+        res.status(200).redirect('/?status=success');
     });
 });
 
