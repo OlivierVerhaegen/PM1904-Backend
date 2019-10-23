@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,38 +8,38 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="./styles.css">
 </head>
+
 <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <a class="navbar-brand" href="index.html">HAP - Backend</a>                   
-                    
-                <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" >Server is up and running.</a>
-                        </li>
-                </div>
-            </nav>
-    <!-- <h1>Server is up and running.</h1> -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">HAP - Backend</a>
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link">Server is up and running.</a>
+            </li>
+            </div>
+    </nav>
     <div class="container">
-            <br>
-            <h4 class="display-8">Voeg producten toe aan HAP.</h4>
-            <hr>
-            <form action="/products/create" method="post">
-                <!-- <div class="form-group"> -->
-                    <div class="row">
+        <br>
+        <h4 class="display-8">Voeg producten toe aan HAP.</h4>
+        <hr>
+        <form action="/products/create" method="post">
+            <!-- <div class="form-group"> -->
+            <div class="row">
                 <div class="col-md-6">
                     <label for="name">Naam</label>
                     <input type="text" name="name" id="name" placeholder="Naam" class="form-control mb-4">
-                <!-- </div> -->
+                    <!-- </div> -->
                 </div>
                 <div class="col-md-6">
-                <div class="custom-control custom-checkbox mb-4">
+                    <div class="custom-control custom-checkbox mb-4">
                         <input type="checkbox" name="available" id="available" class="custom-control-input">
                         <label class="custom-control-label" for="available">Beschikbaar?</label>
-                </div>
+                    </div>
                 </div>
                 <div class="col-md-6">
-                        <label for="price">Prijs (€)</label>
-                    <input type="number" name="price" id="price" placeholder="Prijs"  class="form-control mb-4">
+                    <label for="price">Prijs (€)</label>
+                    <input type="number" name="price" id="price" placeholder="Prijs" class="form-control mb-4">
                 </div>
                 <div class="col-md-6">
                     <label for="photoUrl">Foto-url</label>
@@ -46,22 +47,31 @@
                 </div>
                 <div class="col-md-6">
                     <label for="allergens">Allergenen</label>
-                    <textarea name="allergens" id="allergens" placeholder="Allergenen" cols="30" rows="10" class="form-control mb-4"></textarea>
+                    <textarea name="allergens" id="allergens" placeholder="Allergenen" cols="30" rows="10"
+                        class="form-control mb-4"></textarea>
                 </div>
                 <div class="col-md-6">
                     <label for="description">Beschrijving</label>
-                    <textarea name="description" id="description" placeholder="Beschrijving" cols="30" rows="10" class="form-control mb-4"></textarea>
+                    <textarea name="description" id="description" placeholder="Beschrijving" cols="30" rows="10"
+                        class="form-control mb-4"></textarea>
                 </div>
                 <div class="col-sm-12">
                     <button type="submit" class="btn btn-info btn-block my-3">Maak product</button>
                 </div>
             </div>
-            </form>
-        </div>
+        </form>
+    </div>
 
-        <!-- Bootstrap js dependencies -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- Bootstrap js dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>
