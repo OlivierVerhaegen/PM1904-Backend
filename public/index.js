@@ -12,7 +12,7 @@ $(document).ready(function() {
         }
         if (status == 'error') {
             toast.addClass('error');
-            $('.toast-body').text('Failed to add databes entry.');
+            $('.toast-body').text('Failed to add database entry.');
         }
     });
 
