@@ -3,6 +3,7 @@ const https = require('https');
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 const logger = require('./logger');
 
 const routes = require('./routes');
@@ -10,7 +11,15 @@ const routes = require('./routes');
 const app = express();
 
 app.use(morgan('short'));
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.use(session({
+	secret: 'uf5he0zu7sq3UNny72dza30dgzy',
+	resave: true,
+	saveUninitialized: true
+}));
+app.use(bodyParser.json());
+
 app.use(routes);
 // Serve public files
 app.use(express.static('public'))
