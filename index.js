@@ -12,14 +12,8 @@ const app = express();
 app.use(morgan('short'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(routes);
-
-// Respond to root.
-app.get('/', (req, res) => {
-    logger.warn('Someone is trying to access the root route.');
-    res.sendFile(__dirname + '/public/index.html');
-});
-
-
+// Serve public files
+app.use(express.static('public'))
 
 http.createServer(app).listen(9000, () => {
     logger.info("Server is up an listening on http://localhost:9000");
