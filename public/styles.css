@@ -1,0 +1,17 @@
+.container{
+    background-color: #e9ecef;
+    height: 100%;
+} 
+input{
+    border-radius: 3px;
+}
+@media (min-width: 768px) {
+.custom-control{
+    padding-top: 2.3rem;
+}}
+.display-8{
+    font-weight: 600;
+}
+.col-sm-12{
+    margin-top: -3vh;
+}
