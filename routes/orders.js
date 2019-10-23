@@ -28,7 +28,7 @@ router.get('/:id', (req, res) => {
     const queryString = 'SELECT * FROM orders WHERE id = ?';
     SQLConnection().query(queryString, [req.params.id], (err, rows, fields) => {
         if (err) {
-            logger.error('Failed to get order from database.');
+            logger.error('Failed to get orders from database.');
             res.sendStatus(500);
             return;
         }
