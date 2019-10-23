@@ -22,6 +22,7 @@ router.get('/', function(req, res) {
 	res.sendFile(path.join(__dirname + '/login.html'));
 });
 
+// login
 router.post('/auth', function(req, res) {
 	var username = req.body.username;
 	var password = req.body.password;
@@ -43,6 +44,9 @@ router.post('/auth', function(req, res) {
 	}
 });
 
+
+
+// after login page (temporary)
 router.get('/home', function(req, res) {
 	if (req.session.loggedin) {
 		logger.info('User (' + req.session.username + ') successfully logged in!');
