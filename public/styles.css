@@ -15,3 +15,20 @@ input{
 .col-sm-12{
     margin-top: -3vh;
 }
+
+.toast {
+    position: absolute;
+    top: 4rem;
+    right: 1rem;
+    min-width: 250px;
+}
+
+.toast.success {
+    color: white;
+    background-color: #4BB543;
+}
+
+.toast.error {
+    color: white;
+    background-color: red;
+}
