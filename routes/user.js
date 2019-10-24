@@ -21,7 +21,7 @@ function validateStudentNumber(studentNumber) {
 router.post('/auth', function(req, res) {
 	var username = req.body.username;
     var password = req.body.password;
-    console.log(req);
+    console.log(req.body.username);
 	if (username && password) {
         const queryString = 'SELECT * FROM user WHERE name = ? AND password = ?';
 		SQLConnection().query(queryString, [username, password], function(error, results, fields) {
