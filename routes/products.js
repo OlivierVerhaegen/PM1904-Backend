@@ -54,14 +54,26 @@ router.get('/:id', (req, res) => {
 //--------------------------------------------------------------------------------------
 router.post('/create', (req, res) => {
     if (req.session.loggedin) {
-        logger.info('Creating product: ' + req.body.name);
-
         // Convert checkbox value to boolean.
         if (req.body.available == 'on') {
             req.body.available = true;
         } else {
             req.body.available = false;
         }
+
+        const name = req.body.name;
+        const price = req.body.price;
+        const photoUrl = req.body.photoUrl;
+        const allergens = req.body.allergens;
+        const description = req.body.description;
+        const available = req.body.available;
+
+        if (name == null || price == null || photoUrl == null || description == null) {
+            res.redirect('?/status=error');
+            return;
+        }
+
+        logger.info('Creating product: ' + req.body.name);
 
         const queryString = 'INSERT INTO products (name, price, photoUrl, allergens, description, available) VALUES (?, ?, ?, ?, ?, ?)';
         SQLConnection().query(
@@ -85,6 +97,8 @@ router.post('/create', (req, res) => {
     }
     else {
         logger.error('User is not logged in!');
+        res.end();
+        return;
     }
 });
 
