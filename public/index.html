@@ -74,6 +74,34 @@
                 </div>
             </div>
         </form>
+
+        <br>
+        <h4 class="display-8">Voeg users toe aan HAP.</h4>
+        <hr>
+        <form action="/users/create" method="post">
+            <!-- <div class="form-group"> -->
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="userName">Naam</label>
+                    <input type="text" name="userName" id="userName" placeholder="Naam" class="form-control mb-4">
+                    <!-- </div> -->
+                </div>
+                
+                </div>
+                <div class="col-md-6">
+                    <label for="userId">id</label>
+                    <input type="userId" name="userId" id="userId" placeholder="id" class="form-control mb-4">
+                </div>
+                <div class="col-md-6">
+                    <label for="password">password</label>
+                    <input type="password" name="password" id="password" placeholder="password" class="form-control mb-4">
+                </div>
+        
+                <div class="col-sm-12">
+                    <button type="submit" class="btn btn-info btn-block my-3">Maak user</button>
+                </div>
+            </div>
+        </form>
     </div>
 
     <!-- Bootstrap js dependencies -->
