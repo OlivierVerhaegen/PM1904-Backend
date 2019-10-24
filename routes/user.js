@@ -18,10 +18,6 @@ function validateStudentNumber(studentNumber) {
     }
 }
 
-router.get('/', function(req, res) {
-	res.sendFile(path.join(__dirname + '/login.html'));
-});
-
 // login
 router.post('/auth', function(req, res) {
 	var username = req.body.username;
@@ -32,7 +28,7 @@ router.post('/auth', function(req, res) {
 			if (results.length > 0) {
 				req.session.loggedin = true;
 				req.session.username = username;
-				res.redirect('/home');
+				res.redirect('/');
 			} else {
 				logger.error('Incorrect username and/or password!');
 			}			
