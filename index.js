@@ -10,8 +10,12 @@ const routes = require('./routes');
 
 const app = express();
 
+// Adds request logging.
 app.use(morgan('short'));
+// Support parsing of application/x-www-form-urlencoded post data
 app.use(bodyParser.urlencoded({extended: true}));
+// Support parsing of application/json type post data
+app.use(bodyParser.json());
 
 app.use(session({
 	secret: 'uf5he0zu7sq3UNny72dza30dgzy',
@@ -19,9 +23,18 @@ app.use(session({
     saveUninitialized: true,
     cookie: { maxAge: 60000 }
 }));
-app.use(bodyParser.json());
 
 app.use(routes);
+
+// If user is not logged in, redirect to login page.
+app.use((req, res, next) => {
+    if (req.session.loggedin  && req.session.username) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+});
+
 // Serve public files
 app.use(express.static('public'))
 
