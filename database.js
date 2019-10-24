@@ -3,9 +3,9 @@ const mysql = require('mysql');
 module.exports = () => {
     return mysql.createPool({
         connectionLimit: 10,
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'hap'
+        host: 'vserver122.axc.eu',
+        user: 'philivg122_hap',
+        password: 'zenohattas123',
+        //database: 'hap'
     });
 }
