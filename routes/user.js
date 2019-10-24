@@ -1,7 +1,6 @@
 const logger = require('../logger');
 const express = require('express');
 const router = express.Router();
-const path = require('path');
 const session = require('express-session');
 
 const SQLConnection = require('../database');
@@ -21,14 +20,16 @@ function validateStudentNumber(studentNumber) {
 // login
 router.post('/auth', function(req, res) {
 	var username = req.body.username;
-	var password = req.body.password;
+    var password = req.body.password;
+    console.log(req);
 	if (username && password) {
         const queryString = 'SELECT * FROM user WHERE name = ? AND password = ?';
 		SQLConnection().query(queryString, [username, password], function(error, results, fields) {
 			if (results.length > 0) {
 				req.session.loggedin = true;
 				req.session.username = username;
-				res.redirect('/');
+                res.redirect('/home');
+                logger.info('User logged in.');
 			} else {
 				logger.error('Incorrect username and/or password!');
 			}			
