@@ -66,12 +66,13 @@ router.get('/home', function(req, res) {
 router.post('/create', (req, res) => {
     logger.info('Creating user ' + req.body.userName);
 
-    const queryString = 'INSERT INTO user (name, id, password) VALUES (?, ?, ?)';
+    const queryString = 'INSERT INTO user (name, id, password, studentNumber) VALUES (?, ?, ?, ?)';
     SQLConnection().query(
         queryString,
         [   req.body.userName,
             req.body.userId,
-            req.body.password
+            req.body.password,
+            req.body.studentNumber
             
         ], (err, result, fields) => {
             if (err) {
@@ -90,25 +91,26 @@ router.post('/create', (req, res) => {
 //                                         UPDATE REQUESTS
 //--------------------------------------------------------------------------------------
 router.patch('/:id', (req, res) => {
-    logger.log('Updating user with id: ' + req.params.id);
+    logger.log('Updating user with id: ' + req.params.userId);
 
-    const queryString = 'UPDATE user SET orderNumber = ?, products = ?, subtotal = ? WHERE id = ?';
+    const queryString = 'UPDATE user SET studentNumber = ?, userName = ?, password = ? WHERE userId = ?';
     SQLConnection().query(
       queryString,
       [
           req.body.userId,
           req.body.userName,
           req.body.password,
+          req.body.studentNumber
           
       ],
       (err, result, fields) => {
           if (err) {
-              logger.error('Failed to update user with id: ' + req.params.id)
+              logger.error('Failed to update user with id: ' + req.params.UserId)
               res.status(500).redirect('/?status=error');
               return;
           }
 
-          logger.success('Updated user with id: ' + req.params.id);
+          logger.success('Updated user with id: ' + req.params.userId);
           res.status(200).redirect('/?status=success');
       }
     );
@@ -118,17 +120,17 @@ router.patch('/:id', (req, res) => {
 //                                         DELETE REQUESTS
 //--------------------------------------------------------------------------------------
 router.delete('/:id', (req, res) => {
-    logger.log('Deleting user with id: ' + req.params.id);
+    logger.log('Deleting user with id: ' + req.params.userId);
 
-    const queryString = 'DELETE FROM user WHERE id = ?';
-    SQLConnection().query(queryString, [req.params.id], (err, reslut, fields) => {
+    const queryString = 'DELETE FROM user WHERE userId = ?';
+    SQLConnection().query(queryString, [req.params.userId], (err, reslut, fields) => {
         if (err) {
-            logger.error('Failed to delete user with id: ' + req.params.id);
+            logger.error('Failed to delete user with id: ' + req.params.userId);
             res.status(500).redirect('/?status=error');
             return;
         }
 
-        logger.success('Deleted user with id: ' + req.params.id);
+        logger.success('Deleted user with id: ' + req.params.userId);
         res.status(200).redirect('/?status=success');
     });
 });
