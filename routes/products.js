@@ -78,12 +78,13 @@ router.post('/create', (req, res) => {
         const queryString = 'INSERT INTO products (name, price, photoUrl, allergens, description, available) VALUES (?, ?, ?, ?, ?, ?)';
         SQLConnection().query(
             queryString,
-            [req.body.name,
-            req.body.price,
-            req.body.photoUrl,
-            req.body.allergens,
-            req.body.description,
-            req.body.available
+            [
+                name,
+                price,
+                photoUrl,
+                allergens,
+                description,
+                available
             ], (err, result, fields) => {
                 if (err) {
                     logger.error('Failed to insert new product: ' + err);
