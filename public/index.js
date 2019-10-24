@@ -8,11 +8,11 @@ $(document).ready(function() {
     toast.on('show.bs.toast', function() {
         if (status == 'success') {
             toast.addClass('success');
-            $('.toast-body').text('Succesfully added database entry.');
+            $('.toast-body').text('Successfully added database entry.');
         }
         if (status == 'error') {
             toast.addClass('error');
-            $('.toast-body').text('Failed to add databes entry.');
+            $('.toast-body').text('Failed to add databese entry.');
         }
     });
 
