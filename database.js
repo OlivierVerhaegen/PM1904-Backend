@@ -6,6 +6,6 @@ module.exports = () => {
         host: 'vserver122.axc.eu',
         user: 'philivg122_hap',
         password: 'zenohattas123',
-        //database: 'hap'
+        database: 'philivg122_hap'
     });
 }
