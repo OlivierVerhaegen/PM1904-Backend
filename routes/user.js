@@ -28,7 +28,7 @@ router.post('/auth', function(req, res) {
 			if (results.length > 0) {
 				req.session.loggedin = true;
 				req.session.username = username;
-                res.redirect('/home');
+                res.redirect('/');
                 logger.info('User logged in.');
 			} else {
 				logger.error('Incorrect username and/or password!');
@@ -41,7 +41,19 @@ router.post('/auth', function(req, res) {
 	}
 });
 
-
+// logout
+router.get('/logout', function(req, res, next) {
+    if (req.session) {
+      // delete session object
+      req.session.destroy(function(err) {
+        if(err) {
+          return next(err);
+        } else {
+          return res.redirect('/');
+        }
+      });
+    }
+  });
 
 // after login page (temporary)
 router.get('/home', function(req, res) {
