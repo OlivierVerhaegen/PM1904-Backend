@@ -28,15 +28,17 @@ router.post('/auth', function(req, res) {
 			if (results.length > 0) {
 				req.session.loggedin = true;
 				req.session.username = username;
-                res.redirect('/');
                 logger.info('User logged in.');
+                res.redirect('/?status=success-login');
 			} else {
-				logger.error('Incorrect username and/or password!');
+                logger.error('Incorrect username and/or password!');
+                res.redirect('../login.html?status=error-login');
 			}			
 			res.end();
         });
 	} else {
-		logger.info('Please enter username and password.');
+        logger.info('Please enter username and password.');
+        res.redirect('../login.html?status=error-empty-login');
 		res.end();
 	}
 });
