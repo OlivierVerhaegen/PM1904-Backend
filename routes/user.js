@@ -64,16 +64,29 @@ router.get('/home', function(req, res) {
 
 
 router.post('/create', (req, res) => {
+    const userName = req.body.userName;
+    const studentNumber = req.body.studentNumber;
+    const password = req.body.password;
+
+    logger.info(userName);
+    logger.info(studentNumber);
+    logger.info(password);
+
+    if (!userName || !password) {
+        res.status(500).redirect('/?status=error');
+        logger.error('Failed to instert new user: some fields where empty.');
+        return;
+    }
+
     logger.info('Creating user ' + req.body.userName);
 
-    const queryString = 'INSERT INTO user (name, id, password, studentNumber) VALUES (?, ?, ?, ?)';
+    const queryString = 'INSERT INTO user (name, password, studentNumber) VALUES (?, ?, ?)';
     SQLConnection().query(
         queryString,
-        [   req.body.userName,
-            req.body.userId,
-            req.body.password,
-            req.body.studentNumber
-            
+        [   
+            userName,
+            studentNumber,
+            password
         ], (err, result, fields) => {
             if (err) {
                 logger.error('Failed to insert new user: ' + err);
@@ -91,17 +104,29 @@ router.post('/create', (req, res) => {
 //                                         UPDATE REQUESTS
 //--------------------------------------------------------------------------------------
 router.patch('/:id', (req, res) => {
+    const userName = req.body.userName;
+    const studentNumber = req.body.studentNumber;
+    const password = req.body.password;
+
+    logger.info(userName);
+    logger.info(studentNumber);
+    logger.info(password);
+
+    if (!userName || !password) {
+        res.status(500).redirect('/?status=error');
+        logger.error('Failed to instert new user: some fields where empty.');
+        return;
+    }
+
     logger.log('Updating user with id: ' + req.params.userId);
 
-    const queryString = 'UPDATE user SET studentNumber = ?, userName = ?, password = ? WHERE userId = ?';
+    const queryString = 'UPDATE user SET name = ?, password = ?, studentNumber = ? WHERE userId = ?';
     SQLConnection().query(
       queryString,
       [
-          req.body.userId,
-          req.body.userName,
-          req.body.password,
-          req.body.studentNumber
-          
+          userName, 
+          password,
+          studentNumber          
       ],
       (err, result, fields) => {
           if (err) {

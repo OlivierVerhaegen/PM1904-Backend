@@ -68,8 +68,9 @@ router.post('/create', (req, res) => {
         const description = req.body.description;
         const available = req.body.available;
 
-        if (name == null || price == null || photoUrl == null || description == null) {
-            res.redirect('?/status=error');
+        if (!name || !price || !photoUrl || !description) {
+            res.redirect('/?status=error');
+            logger.error('Failed to instert new product: some fields where empty.');
             return;
         }
 
@@ -109,16 +110,38 @@ router.post('/create', (req, res) => {
 //--------------------------------------------------------------------------------------
 router.patch('/:id', (req, res) => {
     if (req.session.loggedin) {
+        // Convert checkbox value to boolean.
+        if (req.body.available == 'on') {
+            req.body.available = true;
+        } else {
+            req.body.available = false;
+        }
+
+        const name = req.body.name;
+        const price = req.body.price;
+        const photoUrl = req.body.photoUrl;
+        const allergens = req.body.allergens;
+        const description = req.body.description;
+        const available = req.body.available;
+
+        if (!name || !price || !photoUrl || !description) {
+            res.redirect('/?status=error');
+            logger.error('Failed to instert new product: some fields where empty.');
+            return;
+        }
+
         logger.info('Updating product with id: ' + req.params.id);
 
-        const queryString = 'UPDATE products SET name = ?, available = ?, price = ? WHERE id = ?';
+        const queryString = 'UPDATE products SET name = ?, price = ?, photoUrl = ?, allergens = ?, description = ?, available = ? WHERE id = ?';
         SQLConnection().query(
             queryString,
             [
-                req.body.name,
-                req.body.available,
-                req.body.price,
-                req.params.id
+                name,
+                price,
+                photoUrl,
+                allergens,
+                description,
+                available
             ],
             (err, result, fields) => {
                 if (err) {
