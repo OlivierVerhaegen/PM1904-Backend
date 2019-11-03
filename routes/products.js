@@ -8,40 +8,53 @@ const SQLConnection = require('../database');
 //--------------------------------------------------------------------------------------
 //                                         GET REQUESTS
 //--------------------------------------------------------------------------------------
+function getProducts() {
+    const queryString = 'SELECT * FROM products';
+    SQLConnection().query(queryString, (err, rows, fields) => {
+        if (err) {
+            logger.error('Failed to get products from database. ' + err);
+            return {
+                error: 'Failed to get products from database. ' + err
+            };
+        }
+
+        return rows;
+    });
+}
+
 router.get('/', (req, res) => {
     if (req.session.loggedin) {
         logger.info('Getting products from database...');
 
-        const queryString = 'SELECT * FROM products';
-        SQLConnection().query(queryString, (err, rows, fields) => {
-            if (err) {
-                logger.error('Failed to get products from database.');
-                res.sendStatus(500);
-                return;
-            }
-
-            res.json(rows);
-        });
+        res.json(getProducts());
     }
     else {
         logger.error('User is not logged in!');
+        res.json({
+            error: 'You need to be logged in to access products.'
+        });
     }
 });
+
+function getProductById(id) {
+    const queryString = 'SELECT * FROM products WHERE id = ?';
+    SQLConnection().query(queryString, [id], (err, rows, fields) => {
+        if (err) {
+            logger.error('Failed to get product with id: ' + id + ' from database.');
+            return {
+                error: 'Failed to get product with id: ' + id + ' from database.'
+            };
+        }
+
+        return rows;
+    });
+}
 
 router.get('/:id', (req, res) => {
     if (req.session.loggedin) {
         logger.info(`Getting product ${req.params.id} from database...`);
 
-        const queryString = 'SELECT * FROM products WHERE id = ?';
-        SQLConnection().query(queryString, [req.params.id], (err, rows, fields) => {
-            if (err) {
-                logger.error('Failed to get product from database.');
-                res.sendStatus(500);
-                return;
-            }
-
-            res.json(rows);
-        });
+        res.json(getProductById(req.params.id));
     }
     else {
         logger.error('User is not logged in!');
