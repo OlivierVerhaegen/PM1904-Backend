@@ -1,5 +1,6 @@
 const logger = require('../logger');
 const express = require('express');
+const session = require('express-session');
 const router = express.Router();
 
 const SQLConnection = require('../database');
@@ -7,34 +8,60 @@ const SQLConnection = require('../database');
 //--------------------------------------------------------------------------------------
 //                                         GET REQUESTS
 //--------------------------------------------------------------------------------------
-router.get('/', (req, res) => {
-    logger.log('Getting orders from database...');
-
+function getOrders() {
     const queryString = 'SELECT * FROM orders';
     SQLConnection().query(queryString, (err, rows, fields) => {
         if (err) {
             logger.error('Failed to get orders from database.');
-            res.sendStatus(500);
-            return;
+            return {
+                error: 'Failed to get order from database.'
+            };
         }
 
-        res.json(rows);
+        return rows;
     });
+}
+
+router.get('/', (req, res) => {
+    if (req.session.loggedin) {
+        logger.log('Getting orders from database...');
+
+        res.json(getOrders());
+    }
+    else {
+        logger.error('User is not logged in!');
+        res.json({
+            error: 'You need to be logged in to access orders.'
+        });
+    }
 });
 
-router.get('/:id', (req, res) => {
-    logger.log(`Getting order ${req.params.id} from database ...`)
-
+function getOrdersById(id) {
     const queryString = 'SELECT * FROM orders WHERE id = ?';
     SQLConnection().query(queryString, [req.params.id], (err, rows, fields) => {
         if (err) {
-            logger.error('Failed to get orders from database.');
-            res.sendStatus(500);
-            return;
+            logger.error('Failed to get order with id ' + id + ' from database.');
+            return {
+                error: 'Failed to get order with id ' + id + ' from database.'
+            }
         }
 
-        res.json(rows);
-    })
+        return rows;
+    });
+}
+
+router.get('/:id', (req, res) => {
+    if (req.session.loggedin) {
+        logger.log(`Getting order ${req.params.id} from database ...`)
+
+        res.json(getOrdersById(req.params.id));
+    }
+    else {
+        logger.error('User is not logged in!');
+        res.json({
+            error: 'You need to be logged in to access orders.'
+        });
+    }
 });
 
 
