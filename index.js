@@ -3,15 +3,38 @@ const https = require('https');
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 const logger = require('./logger');
 
 const routes = require('./routes');
 
 const app = express();
 
+// Adds request logging.
 app.use(morgan('short'));
-app.use(bodyParser.urlencoded({extended: false}));
+// Support parsing of application/x-www-form-urlencoded post data
+app.use(bodyParser.urlencoded({extended: true}));
+// Support parsing of application/json type post data
+app.use(bodyParser.json());
+
+app.use(session({
+	secret: 'uf5he0zu7sq3UNny72dza30dgzy',
+	resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60000 }
+}));
+
 app.use(routes);
+
+// If user is not logged in, redirect to login page.
+app.use((req, res, next) => {
+    if (req.session.loggedin  && req.session.username) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+});
+
 // Serve public files
 app.use(express.static('public'))
 

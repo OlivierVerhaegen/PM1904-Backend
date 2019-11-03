@@ -44,12 +44,23 @@ router.get('/:id', (req, res) => {
 router.post('/create', (req, res) => {
     logger.log('Creating order ' + req.body.orderNumber);
 
-    const queryString = 'INSERT INTO orders (orderNumber, productId, userId) VALUES (?, ?, ?)';
+    const orderId = req.body.orderId;
+    const productId = req.body.productId;
+    const userId = req.body.userId;
+
+    if (!orderId || !productId || ! userId) {
+        res.redirect('/?status=error');
+        logger.error('Failed to instert new order: some fields where empty.');
+        return;
+    }
+
+    const queryString = 'INSERT INTO orders (orderId, productId, userId) VALUES (?, ?, ?)';
     SQLConnection().query(
         queryString,
-        [   req.body.orderNumber,
-            req.body.productId,
-            req.body.userId
+        [   
+            orderId,
+            productId,
+            userId
         ],
         (err, result, fields) => {
             if (err) {
@@ -70,14 +81,23 @@ router.post('/create', (req, res) => {
 router.patch('/:id', (req, res) => {
     logger.log('Updating order with id: ' + req.params.id);
 
-    const queryString = 'UPDATE orders SET orderNumber = ?, products = ?, subtotal = ? WHERE id = ?';
+    const orderId = req.body.orderId;
+    const productId = req.body.productId;
+    const userId = req.body.userId;
+
+    if (!orderId || !productId || ! userId) {
+        res.redirect('/?status=error');
+        logger.error('Failed to instert new order: some fields where empty.');
+        return;
+    }
+
+    const queryString = 'UPDATE orders SET productId = ?, userId = ? WHERE orderId = ?';
     SQLConnection().query(
       queryString,
       [
-          req.body.orderNumber,
-          req.body.products,
-          req.body.subtotal,
-          req.params.id
+        orderId,
+        productId,
+        userId
       ],
       (err, result, fields) => {
           if (err) {
