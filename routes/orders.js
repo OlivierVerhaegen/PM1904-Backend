@@ -44,23 +44,30 @@ router.get('/:id', (req, res) => {
 router.post('/create', (req, res) => {
     logger.log('Creating order ' + req.body.orderNumber);
 
-    const orderId = req.body.orderId;
+    const id = req.body.orderId;
     const productId = req.body.productId;
     const userId = req.body.userId;
+    const status = req.body.status ? req.body.status : 'busy';
+    const quantity = req.body.quantity;
+    const price = req.body.price;
 
-    if (!orderId || !productId || ! userId) {
+
+    if (!id || !productId || ! userId || !status || !quantity || !price) {
         res.redirect('/?status=error');
         logger.error('Failed to instert new order: some fields where empty.');
         return;
     }
 
-    const queryString = 'INSERT INTO orders (orderId, productId, userId) VALUES (?, ?, ?)';
+    const queryString = 'INSERT INTO orders (id, productId, userId, status, quantity, price) VALUES (?, ?, ?, ?, ?, ?)';
     SQLConnection().query(
         queryString,
         [   
-            orderId,
+            id,
             productId,
-            userId
+            userId,
+            status,
+            quantity,
+            price
         ],
         (err, result, fields) => {
             if (err) {
@@ -81,23 +88,26 @@ router.post('/create', (req, res) => {
 router.patch('/:id', (req, res) => {
     logger.log('Updating order with id: ' + req.params.id);
 
-    const orderId = req.body.orderId;
-    const productId = req.body.productId;
-    const userId = req.body.userId;
+    const id = req.body.orderId;
+    const status = req.body.status ? req.body.status : 'busy';
+    const quantity = req.body.quantity;
+    const price = req.body.price;
 
-    if (!orderId || !productId || ! userId) {
+
+    if (!id || !status || !quantity || !price) {
         res.redirect('/?status=error');
         logger.error('Failed to instert new order: some fields where empty.');
         return;
     }
 
-    const queryString = 'UPDATE orders SET productId = ?, userId = ? WHERE orderId = ?';
+    const queryString = 'UPDATE orders status = ?, quantity = ?, price = ? WHERE id = ?';
     SQLConnection().query(
       queryString,
       [
-        orderId,
-        productId,
-        userId
+        status,
+        quantity,
+        price,
+        id
       ],
       (err, result, fields) => {
           if (err) {
