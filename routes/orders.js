@@ -112,6 +112,31 @@ router.patch('/:id', (req, res) => {
     );
 });
 
+router.patch('complete/:id', (req, res) => {
+    logger.log('Completing order with id: ' + req.params.id);
+
+    const id = req.params.id;
+
+    const queryString = 'UPDATE orders SET status = ? WHERE id = ?';
+    SQLConnection().query(
+      queryString,
+      [
+        'ready',
+        id
+      ],
+      (err, result, fields) => {
+        if (err) {
+        logger.error('Failed to complete order with id: ' + req.params.id)
+        res.status(500).redirect('/?status=error');
+        return;
+        }
+
+        logger.success('Completed order with id: ' + req.params.id);
+        res.status(200).redirect('/?status=success');
+      }
+    );
+});
+
 
 //--------------------------------------------------------------------------------------
 //                                         DELETE REQUESTS
