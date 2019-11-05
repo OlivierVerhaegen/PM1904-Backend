@@ -75,8 +75,8 @@ describe('Testing order routes:', () => {
     context('- Get order by id', () => {
         const description = 'Should get the defined order by id.';
         it(description, (done) => {
-            const id = 0;
-            server.get(`orders/${id}`, (done) => {
+            const id = 1;
+            server.get(`/orders/${id}`).end((err, res) => {
                 if (err) return done(err);
                 expect(res).to.have.status(200);
                 expect(res).to.be.json;
@@ -89,15 +89,53 @@ describe('Testing order routes:', () => {
         const description = 'Should create an order.';
         it(description, (done) => {
             server
-            .put('orders/create')
+            .post('/orders/create')
             .send({
-                
+                productId: '0',
+                userId: '0',
+                status: 'busy',
+                quantity: '5',
+                price: '10.98'
             })
             .redirects(0)
             .end((err, res) => {
                 if (err) return done(err);
                 expect(res).to.have.status(201);
-                expect(res).to.redirectTo('/?status=success');
+                done();
+            });
+        });
+    });
+
+    context('- Update order', () => {
+        const description = 'Should update the defined order.';
+        it(description, (done) => {
+            const id = 1;
+            server
+            .patch(`/orders/${id}`)
+            .send({
+                status: 'done',
+                quantity: '15',
+                price: '50.0'
+            })
+            .redirects(0)
+            .end((err, res) => {
+                if (err) return done(err);
+                expect(res).to.have.status(201);
+                done();
+            });
+        });
+    });
+
+    context('- Delete order', () => {
+        const description = 'Should delete the defined order.';
+        it(description, (done) => {
+            const id = 1;
+            server
+            .delete(`/orders/${id}`)
+            .redirects(0)
+            .end((err, res) => {
+                if (err) return done(err);
+                expect(res).to.have.status(200);
                 done();
             });
         });
