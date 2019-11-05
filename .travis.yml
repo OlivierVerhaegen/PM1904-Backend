@@ -4,3 +4,53 @@ node_js:
 cache:
   directories:
     - "node_modules"
+addons:
+  mariadb: '10.4'
+before_script:
+  - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+
+  - sudo mysql -e 'USE test'
+
+  - sudo mysql -e 'CREATE TABLE `orders` (
+      `id` INT(11) NOT NULL AUTO_INCREMENT,
+      `productId` INT(11) NOT NULL,
+      `userId` INT(11) NOT NULL,
+      `dateTime` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+      `status` VARCHAR(50) NULL DEFAULT 'busy' COMMENT 'States: busy, ready',
+      `quantity` INT(11) NULL DEFAULT 0,
+      `price` DOUBLE UNSIGNED NULL DEFAULT 0,
+      PRIMARY KEY (`id`),
+      INDEX `Product_ID` (`productId`),
+      INDEX `Student_ID` (`userId`)
+    )
+    COLLATE='latin1_swedish_ci'
+    ENGINE=InnoDB
+    AUTO_INCREMENT=1
+    ;'
+
+  - sudo mysql -e 'CREATE TABLE `products` (
+      `id` INT(11) NOT NULL AUTO_INCREMENT,
+      `name` VARCHAR(255) NOT NULL,
+      `price` DOUBLE NOT NULL,
+      `photoUrl` TEXT NOT NULL,
+      `allergens` TEXT NOT NULL,
+      `description` TEXT NOT NULL,
+      `available` INT(11) NOT NULL DEFAULT 0,
+      PRIMARY KEY (`id`)
+    )
+    COLLATE='latin1_swedish_ci'
+    ENGINE=InnoDB
+    AUTO_INCREMENT=1
+    ;'
+
+  - sudo mysql -e 'CREATE TABLE `user` (
+      `id` INT(11) NOT NULL AUTO_INCREMENT,
+      `name` TEXT NOT NULL,
+      `password` VARCHAR(30) NOT NULL,
+      `studentNumber` VARCHAR(255) NULL DEFAULT NULL,
+      PRIMARY KEY (`id`)
+    )
+    COLLATE='latin1_swedish_ci'
+    ENGINE=InnoDB
+    AUTO_INCREMENT=1
+    ;'

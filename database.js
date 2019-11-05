@@ -1,6 +1,11 @@
 const mysql = require('mysql');
 const credentials = require('./credentials');
+const testCredentials = require('./credentials.test');
 
 module.exports = () => {
-    return mysql.createPool(credentials);
+    if (credentials) {
+        return mysql.createPool(credentials);
+    } else {
+        return mysql.createPool(testCredentials);
+    }
 }
