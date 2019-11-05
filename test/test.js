@@ -282,6 +282,9 @@ describe('Testing user routes:',  () => {
     //     });
     // });
 
+    // Close server after these tests.
+    after(() => server.close());
+
     context('- Update user', () => {
         const description = 'Should update the defined user.';
         it(description, (done) => {
