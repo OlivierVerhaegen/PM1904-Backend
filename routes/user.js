@@ -124,7 +124,7 @@ router.patch('/:id', (req, res) => {
         return;
     }
 
-    logger.log('Updating user with id: ' + req.params.userId);
+    logger.info('Updating user with id: ' + req.params.id);
 
     const queryString = 'UPDATE user SET name = ?, password = ?, studentNumber = ? WHERE id = ?';
     SQLConnection().query(
@@ -132,17 +132,18 @@ router.patch('/:id', (req, res) => {
       [
           userName, 
           password,
-          studentNumber          
+          studentNumber,
+          req.params.id         
       ],
       (err, result, fields) => {
           if (err) {
-              logger.error('Failed to update user with id: ' + req.params.UserId)
+              logger.error('Failed to update user with id: ' + req.params.id)
               res.redirect(500, '/?status=error');
               res.end();
               return;
           }
 
-          logger.success('Updated user with id: ' + req.params.userId);
+          logger.success('Updated user with id: ' + req.params.id);
           res.redirect(201, '/?status=success');
       }
     );
@@ -152,17 +153,17 @@ router.patch('/:id', (req, res) => {
 //                                         DELETE REQUESTS
 //--------------------------------------------------------------------------------------
 router.delete('/:id', (req, res) => {
-    logger.log('Deleting user with id: ' + req.params.userId);
+    logger.info('Deleting user with id: ' + req.params.id);
 
     const queryString = 'DELETE FROM user WHERE id = ?';
-    SQLConnection().query(queryString, [req.params.userId], (err, reslut, fields) => {
+    SQLConnection().query(queryString, [req.params.id], (err, reslut, fields) => {
         if (err) {
-            logger.error('Failed to delete user with id: ' + req.params.userId);
+            logger.error('Failed to delete user with id: ' + req.params.id);
             res.redirect(500, '/?status=error');
             return;
         }
 
-        logger.success('Deleted user with id: ' + req.params.userId);
+        logger.success('Deleted user with id: ' + req.params.id);
         res.redirect(200, '/?status=success');
     });
 });

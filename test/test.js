@@ -232,3 +232,88 @@ describe('Testing products routes:',  () => {
         });
     });
 });
+
+
+//----------------------------
+//        User Routes
+//----------------------------
+describe('Testing user routes:',  () => {
+    // context('- Get all users', () => {
+    //     const description = 'Should get all the products.';
+    //     it(description, (done) => {
+    //         server.get('/products').end((err, res) => {
+    //             if (err) return done(err);
+    //             expect(res).to.have.status(200);
+    //             expect(res).to.be.json;
+    //             done();
+    //         });
+    //     });
+    // });
+
+    // context('- Get product by id', () => {
+    //     const description = 'Should get the defined product by id.';
+    //     it(description, (done) => {
+    //         const id = 1;
+    //         server.get(`/products/${id}`).end((err, res) => {
+    //             if (err) return done(err);
+    //             expect(res).to.have.status(200);
+    //             expect(res).to.be.json;
+    //             done();
+    //         });
+    //     });
+    // });
+
+    context('- Create user', () => {
+        const description = 'Should create a user.';
+        it(description, (done) => {
+            server
+            .post('/user/create')
+            .send({
+                userName: 'TestUser',
+                password: 'Test!',
+                studentNumber: 's088705'
+            })
+            .redirects(0)
+            .end((err, res) => {
+                if (err) return done(err);
+                expect(res).to.have.status(201);
+                done();
+            });
+        });
+    });
+
+    context('- Update user', () => {
+        const description = 'Should update the defined user.';
+        it(description, (done) => {
+            const id = 1;
+            server
+            .patch(`/user/${id}`)
+            .send({
+                userName: 'TestUserUpdate',
+                password: 'Test!',
+                studentNumber: 's088705'
+            })
+            .redirects(0)
+            .end((err, res) => {
+                if (err) return done(err);
+                expect(res).to.have.status(201);
+                done();
+            });
+        });
+    });
+
+    context('- Delete user', () => {
+        const description = 'Should delete the defined user.';
+        it(description, (done) => {
+            const id = 1;
+            server
+            .delete(`/user/${id}`)
+            .redirects(0)
+            .end((err, res) => {
+                if (err) return done(err);
+                expect(res).to.have.status(200);
+                done();
+            });
+        });
+    });
+});
