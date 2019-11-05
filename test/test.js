@@ -27,6 +27,25 @@ describe('Testing root routes:', () => {
         });
     });
 
+    context('- Create user', () => {
+        const description = 'Should create a user.';
+        it(description, (done) => {
+            server
+            .post('/user/create')
+            .send({
+                userName: 'test',
+                password: 'test',
+                studentNumber: 's088705'
+            })
+            .redirects(0)
+            .end((err, res) => {
+                if (err) return done(err);
+                expect(res).to.have.status(201);
+                done();
+            });
+        });
+    });
+
     context('- Log in', () => {
         const description = 'Should log in user.'
         it(description, (done) => {
@@ -262,25 +281,6 @@ describe('Testing user routes:',  () => {
     //         });
     //     });
     // });
-
-    context('- Create user', () => {
-        const description = 'Should create a user.';
-        it(description, (done) => {
-            server
-            .post('/user/create')
-            .send({
-                userName: 'TestUser',
-                password: 'Test!',
-                studentNumber: 's088705'
-            })
-            .redirects(0)
-            .end((err, res) => {
-                if (err) return done(err);
-                expect(res).to.have.status(201);
-                done();
-            });
-        });
-    });
 
     context('- Update user', () => {
         const description = 'Should update the defined user.';
