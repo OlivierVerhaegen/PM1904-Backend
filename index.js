@@ -16,7 +16,7 @@ app.use(morgan('short'));
 app.use(bodyParser.urlencoded({extended: true}));
 // Support parsing of application/json type post data
 app.use(bodyParser.json());
-
+// Support the usage of sessions.
 app.use(session({
 	secret: 'uf5he0zu7sq3UNny72dza30dgzy',
 	resave: false,
@@ -24,6 +24,7 @@ app.use(session({
     cookie: { maxAge: 60000 }
 }));
 
+// Register our routes.
 app.use(routes);
 
 // If user is not logged in, redirect to login page.
@@ -35,9 +36,10 @@ app.use((req, res, next) => {
     }
 });
 
-// Serve public files
+// Serve public files.
 app.use(express.static('public'))
 
+// Start the server.
 http.createServer(app).listen(9000, () => {
     logger.info("Server is up an listening on http://localhost:9000");
 });
@@ -46,3 +48,6 @@ http.createServer(app).listen(9000, () => {
 // https.createServer(app).listen(9443, () => {
 //     logger.log("Server is up an listening on http://localhost:9000");
 // });
+
+// Export the server for testing.
+module.exports = app;
