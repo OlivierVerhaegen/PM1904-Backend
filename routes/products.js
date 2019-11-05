@@ -149,11 +149,13 @@ router.patch('/:id', (req, res) => {
                 photoUrl,
                 allergens,
                 description,
-                available
+                available,
+                req.params.id
             ],
             (err, result, fields) => {
                 if (err) {
                     logger.error('Failed to update product with id: ' + req.params.id);
+                    logger.error(err);
                     res.redirect(500, '/?status=error');
                     return;
                 }
@@ -183,6 +185,7 @@ router.delete('/:id', (req, res) => {
         SQLConnection().query(queryString, [req.params.id], (err, result, fields) => {
             if (err) {
                 logger.error('Failed to delete product with id: ' + req.params.id);
+                logger.error(err);
                 res.redirect(500, '/?status=error');
                 return;
             }
