@@ -80,6 +80,25 @@ describe('Testing order routes:', () => {
                 if (err) return done(err);
                 expect(res).to.have.status(200);
                 expect(res).to.be.json;
+                done();
+            });
+        });
+    });
+
+    context('- Create order', () => {
+        const description = 'Should create an order.';
+        it(description, (done) => {
+            server
+            .put('orders/create')
+            .send({
+                
+            })
+            .redirects(0)
+            .end((err, res) => {
+                if (err) return done(err);
+                expect(res).to.have.status(201);
+                expect(res).to.redirectTo('/?status=success');
+                done();
             });
         });
     });
