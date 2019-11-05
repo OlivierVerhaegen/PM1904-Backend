@@ -141,3 +141,94 @@ describe('Testing order routes:', () => {
         });
     });
 });
+
+
+//----------------------------
+//        Order Routes
+//----------------------------
+describe('Testing products routes:',  () => {
+    context('- Get all products', () => {
+        const description = 'Should get all the products.';
+        it(description, (done) => {
+            server.get('/products').end((err, res) => {
+                if (err) return done(err);
+                expect(res).to.have.status(200);
+                expect(res).to.be.json;
+                done();
+            });
+        });
+    });
+
+    context('- Get product by id', () => {
+        const description = 'Should get the defined product by id.';
+        it(description, (done) => {
+            const id = 1;
+            server.get(`/products/${id}`).end((err, res) => {
+                if (err) return done(err);
+                expect(res).to.have.status(200);
+                expect(res).to.be.json;
+                done();
+            });
+        });
+    });
+
+    context('- Create product', () => {
+        const description = 'Should create a product.';
+        it(description, (done) => {
+            server
+            .post('/products/create')
+            .send({
+                name: 'test',
+                price: '10.2',
+                photoUrl: 'http://test.test',
+                allergens: 'Test allergens',
+                description: 'Test description',
+                available: "20"
+            })
+            .redirects(0)
+            .end((err, res) => {
+                if (err) return done(err);
+                expect(res).to.have.status(201);
+                done();
+            });
+        });
+    });
+
+    context('- Update product', () => {
+        const description = 'Should update the defined product.';
+        it(description, (done) => {
+            const id = 1;
+            server
+            .patch(`/products/${id}`)
+            .send({
+                name: 'testUpdate',
+                price: '10.2',
+                photoUrl: 'http://test.test',
+                allergens: 'Test allergens',
+                description: 'Test description',
+                available: "20"
+            })
+            .redirects(0)
+            .end((err, res) => {
+                if (err) return done(err);
+                expect(res).to.have.status(201);
+                done();
+            });
+        });
+    });
+
+    context('- Delete product', () => {
+        const description = 'Should delete the defined product.';
+        it(description, (done) => {
+            const id = 1;
+            server
+            .delete(`/products/${id}`)
+            .redirects(0)
+            .end((err, res) => {
+                if (err) return done(err);
+                expect(res).to.have.status(200);
+                done();
+            });
+        });
+    });
+});
