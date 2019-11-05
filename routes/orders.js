@@ -33,6 +33,7 @@ router.get('/', (req, res) => {
         res.status(401).json({
             error: 'You need to be logged in to access orders.'
         });
+        res.end();
     }
 });
 
@@ -61,6 +62,7 @@ router.get('/:id', (req, res) => {
         res.status(401).json({
             error: 'You need to be logged in to access orders.'
         });
+        res.end();
     }
 });
 
@@ -82,6 +84,7 @@ router.post('/create', (req, res) => {
         if (!productId || !userId || !status || !quantity || !price) {
             res.redirect(500, '/?status=error');
             logger.error('Failed to instert new order: some fields where empty.');
+            res.end();
             return;
         }
     
@@ -99,6 +102,7 @@ router.post('/create', (req, res) => {
                 if (err) {
                     logger.error('Failed to insert new order: ' + err);
                     res.redirect(500, '/?status=error');
+                    res.end();
                     return;
                 } 
     
@@ -112,6 +116,7 @@ router.post('/create', (req, res) => {
         res.status(401).json({
             error: 'You need to be logged in to access orders.'
         });
+        res.end();
     }
 })
 
@@ -130,6 +135,7 @@ router.patch('/:id', (req, res) => {
         if (!status || !quantity || !price) {
             res.redirect(500, '/?status=error');
             logger.error('Failed to instert new order: some fields where empty.');
+            end();
             return;
         }
     
@@ -147,6 +153,7 @@ router.patch('/:id', (req, res) => {
                   logger.error('Failed to update order with id: ' + req.params.id)
                   logger.error(err);
                   res.redirect(500, '/?status=error');
+                  res.end();
                   return;
               }
     
@@ -160,6 +167,7 @@ router.patch('/:id', (req, res) => {
         res.status(401).json({
             error: 'You need to be logged in to access orders.'
         });
+        res.end();
     }
 });
 
@@ -176,6 +184,7 @@ router.delete('/:id', (req, res) => {
             if (err) {
                 logger.error('Failed to delete order with id: ' + req.params.id);
                 res.redirect(500, '/?status=error');
+                res.end();
                 return;
             }
     
@@ -188,6 +197,7 @@ router.delete('/:id', (req, res) => {
         res.status(401).json({
             error: 'You need to be logged in to access orders.'
         });
+        res.end();
     }
 });
 

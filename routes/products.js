@@ -30,9 +30,10 @@ router.get('/', (req, res) => {
     }
     else {
         logger.error('User is not logged in!');
-        res.json({
+        res.status(401).json({
             error: 'You need to be logged in to access products.'
         });
+        res.end();
     }
 });
 
@@ -58,6 +59,10 @@ router.get('/:id', (req, res) => {
     }
     else {
         logger.error('User is not logged in!');
+        res.status(401).json({
+            error: 'You need to be logged in to access products.'
+        });
+        res.end();
     }
 });
 
@@ -67,13 +72,6 @@ router.get('/:id', (req, res) => {
 //--------------------------------------------------------------------------------------
 router.post('/create', (req, res) => {
     if (req.session.loggedin) {
-        // Convert checkbox value to boolean.
-        if (req.body.available == 'on') {
-            req.body.available = true;
-        } else {
-            req.body.available = false;
-        }
-
         const name = req.body.name;
         const price = req.body.price;
         const photoUrl = req.body.photoUrl;
@@ -82,8 +80,9 @@ router.post('/create', (req, res) => {
         const available = req.body.available;
 
         if (!name || !price || !photoUrl || !description) {
-            res.redirect('/?status=error');
+            res.redirect(500, '/?status=error');
             logger.error('Failed to instert new product: some fields where empty.');
+            res.end();
             return;
         }
 
@@ -102,18 +101,20 @@ router.post('/create', (req, res) => {
             ], (err, result, fields) => {
                 if (err) {
                     logger.error('Failed to insert new product: ' + err);
-                    res.status(500).redirect('/?status=error');
+                    res.redirect(500, '/?status=error');
                     return;
                 }
 
                 logger.success('Inserted new product with id: ' + result.insertId)
-                res.status(201).redirect('/?status=success');
+                res.redirect(201, '/?status=success');
             });
     }
     else {
         logger.error('User is not logged in!');
+        res.status(401).json({
+            error: 'You need to be logged in to access products.'
+        });
         res.end();
-        return;
     }
 });
 
@@ -123,13 +124,6 @@ router.post('/create', (req, res) => {
 //--------------------------------------------------------------------------------------
 router.patch('/:id', (req, res) => {
     if (req.session.loggedin) {
-        // Convert checkbox value to boolean.
-        if (req.body.available == 'on') {
-            req.body.available = true;
-        } else {
-            req.body.available = false;
-        }
-
         const name = req.body.name;
         const price = req.body.price;
         const photoUrl = req.body.photoUrl;
@@ -140,6 +134,7 @@ router.patch('/:id', (req, res) => {
         if (!name || !price || !photoUrl || !description) {
             res.redirect('/?status=error');
             logger.error('Failed to instert new product: some fields where empty.');
+            res.end();
             return;
         }
 
@@ -159,17 +154,21 @@ router.patch('/:id', (req, res) => {
             (err, result, fields) => {
                 if (err) {
                     logger.error('Failed to update product with id: ' + req.params.id);
-                    res.status(500).redirect('/?status=error');
+                    res.redirect(500, '/?status=error');
                     return;
                 }
 
                 logger.success('Updated product with id: ' + req.params.id);
-                res.status(200).redirect('/?status=success');
+                res.redirect(201, '/?status=success');
             }
         );
     }
     else {
         logger.error('User is not logged in!');
+        res.status(401).json({
+            error: 'You need to be logged in to access products.'
+        });
+        res.end();
     }
 });
 
@@ -184,16 +183,20 @@ router.delete('/:id', (req, res) => {
         SQLConnection().query(queryString, [req.params.id], (err, result, fields) => {
             if (err) {
                 logger.error('Failed to delete product with id: ' + req.params.id);
-                res.status(500).redirect('/?status=error');
+                res.redirect(500, '/?status=error');
                 return;
             }
 
             logger.success('Deleted product with id: ' + req.params.id);
-            res.status(200).redirect('/?status=success');
+            res.redirect(200, '/?status=success');
         });
     }
     else {
         logger.error('User is not logged in!');
+        res.status(401).json({
+            error: 'You need to be logged in to access products.'
+        });
+        res.end();
     }
 });
 
