@@ -14,7 +14,7 @@ before_script:
       `productId` INT(11) NOT NULL,
       `userId` INT(11) NOT NULL,
       `dateTime` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-      `status` VARCHAR(50) NULL DEFAULT `busy`,
+      `status` VARCHAR(50) NULL,
       `quantity` INT(11) NULL DEFAULT 0,
       `price` DOUBLE UNSIGNED NULL DEFAULT 0,
       PRIMARY KEY (`id`),
