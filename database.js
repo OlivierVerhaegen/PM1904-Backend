@@ -1,11 +1,19 @@
+const fs = require('fs');
 const mysql = require('mysql');
-const credentials = require('./credentials');
-const testCredentials = require('./credentials.test');
+
+let credentials;
+
+try {
+    if (fs.existsSync('./credentials')) {
+        credentials = require('./credentials');
+    } else {
+        credentials = require('./credentials.test');
+    }
+} catch(err) {
+    console.log(err);
+    credentials = require('./credentials.test');
+}
 
 module.exports = () => {
-    if (credentials) {
-        return mysql.createPool(credentials);
-    } else {
-        return mysql.createPool(testCredentials);
-    }
+    return mysql.createPool(credentials);
 }
