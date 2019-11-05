@@ -4,8 +4,8 @@ node_js:
 cache:
   directories:
     - "node_modules"
-addons:
-  mariadb: '10.4'
+services:
+  - mysql
 before_script:
   - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 
