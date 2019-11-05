@@ -32,13 +32,13 @@ router.post('/auth', function(req, res) {
                 res.redirect('/?status=success-login');
 			} else {
                 logger.error('Incorrect username and/or password!');
-                res.redirect('../login.html?status=error-login');
+                res.redirect(401, '../login.html?status=error-login');
 			}			
 			res.end();
         });
 	} else {
         logger.info('Please enter username and password.');
-        res.redirect('../login.html?status=error-empty-login');
+        res.redirect(401, '../login.html?status=error-empty-login');
 		res.end();
 	}
 });
@@ -76,16 +76,13 @@ router.get('/home', function(req, res) {
 
 router.post('/create', (req, res) => {
     const userName = req.body.userName;
-    const studentNumber = req.body.studentNumber;
     const password = req.body.password;
-
-    logger.info(userName);
-    logger.info(studentNumber);
-    logger.info(password);
+    const studentNumber = req.body.studentNumber;
 
     if (!userName || !password) {
-        res.status(500).redirect('/?status=error');
+        res.redirect(500, '/?status=error');
         logger.error('Failed to instert new user: some fields where empty.');
+        res.end();
         return;
     }
 
@@ -96,17 +93,18 @@ router.post('/create', (req, res) => {
         queryString,
         [   
             userName,
-            studentNumber,
-            password
+            password,
+            studentNumber
         ], (err, result, fields) => {
             if (err) {
                 logger.error('Failed to insert new user: ' + err);
-                res.status(500).redirect('/?status=error');
+                res.redirect(500, '/?status=error');
+                res.end();
                 return;
             } 
 
             logger.success('Inserted new user with id: ' + result.insertId)
-            res.status(201).redirect('/?status=success');
+            res.redirect(201, '/?status=success');
         }
     );
 
@@ -116,22 +114,19 @@ router.post('/create', (req, res) => {
 //--------------------------------------------------------------------------------------
 router.patch('/:id', (req, res) => {
     const userName = req.body.userName;
-    const studentNumber = req.body.studentNumber;
     const password = req.body.password;
-
-    logger.info(userName);
-    logger.info(studentNumber);
-    logger.info(password);
+    const studentNumber = req.body.studentNumber;
 
     if (!userName || !password) {
-        res.status(500).redirect('/?status=error');
+        res.redirect(500, '/?status=error');
         logger.error('Failed to instert new user: some fields where empty.');
+        res.end();
         return;
     }
 
     logger.log('Updating user with id: ' + req.params.userId);
 
-    const queryString = 'UPDATE user SET name = ?, password = ?, studentNumber = ? WHERE userId = ?';
+    const queryString = 'UPDATE user SET name = ?, password = ?, studentNumber = ? WHERE id = ?';
     SQLConnection().query(
       queryString,
       [
@@ -142,12 +137,13 @@ router.patch('/:id', (req, res) => {
       (err, result, fields) => {
           if (err) {
               logger.error('Failed to update user with id: ' + req.params.UserId)
-              res.status(500).redirect('/?status=error');
+              res.redirect(500, '/?status=error');
+              res.end();
               return;
           }
 
           logger.success('Updated user with id: ' + req.params.userId);
-          res.status(200).redirect('/?status=success');
+          res.redirect(201, '/?status=success');
       }
     );
 });
@@ -158,16 +154,16 @@ router.patch('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
     logger.log('Deleting user with id: ' + req.params.userId);
 
-    const queryString = 'DELETE FROM user WHERE userId = ?';
+    const queryString = 'DELETE FROM user WHERE id = ?';
     SQLConnection().query(queryString, [req.params.userId], (err, reslut, fields) => {
         if (err) {
             logger.error('Failed to delete user with id: ' + req.params.userId);
-            res.status(500).redirect('/?status=error');
+            res.redirect(500, '/?status=error');
             return;
         }
 
         logger.success('Deleted user with id: ' + req.params.userId);
-        res.status(200).redirect('/?status=success');
+        res.redirect(200, '/?status=success');
     });
 });
 
