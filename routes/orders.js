@@ -8,25 +8,21 @@ const SQLConnection = require('../database');
 //--------------------------------------------------------------------------------------
 //                                         GET REQUESTS
 //--------------------------------------------------------------------------------------
-function getOrders() {
-    const queryString = 'SELECT * FROM orders';
-    SQLConnection().query(queryString, (err, rows, fields) => {
-        if (err) {
-            logger.error('Failed to get orders from database.');
-            return {
-                error: 'Failed to get order from database.'
-            };
-        }
-
-        return rows;
-    });
-}
-
 router.get('/', (req, res) => {
     if (req.session.loggedin) {
         logger.info('Getting orders from database...');
 
-        res.json(getOrders());
+        const queryString = 'SELECT * FROM orders';
+        SQLConnection().query(queryString, (err, rows, fields) => {
+            if (err) {
+                logger.error('Failed to get orders from database.');
+                res.json({
+                    error: 'Failed to get order from database.'
+                });
+            }
+    
+            res.json(rows);
+        });
     }
     else {
         logger.error('User is not logged in!');
@@ -37,25 +33,21 @@ router.get('/', (req, res) => {
     }
 });
 
-function getOrdersById(id) {
-    const queryString = 'SELECT * FROM orders WHERE id = ?';
-    SQLConnection().query(queryString, [id], (err, rows, fields) => {
-        if (err) {
-            logger.error('Failed to get order with id ' + id + ' from database.');
-            return {
-                error: 'Failed to get order with id ' + id + ' from database.'
-            }
-        }
-
-        return rows;
-    });
-}
-
 router.get('/:id', (req, res) => {
     if (req.session.loggedin) {
         logger.info(`Getting order ${req.params.id} from database ...`)
 
-        res.json(getOrdersById(req.params.id));
+        const queryString = 'SELECT * FROM orders WHERE id = ?';
+        SQLConnection().query(queryString, [req.params.id], (err, rows, fields) => {
+            if (err) {
+                logger.error('Failed to get order with id ' + req.params.id + ' from database.');
+                res.json({
+                    error: 'Failed to get order with id ' + req.params.id + ' from database.'
+                });
+            }
+    
+            res.json(rows);
+        });
     }
     else {
         logger.error('User is not logged in!');
