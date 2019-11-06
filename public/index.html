@@ -15,7 +15,7 @@
 
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link">Server is up and running.</a>
+                <a class="nav-link" href="user/logout">Logout</a>
             </li>
         </ul>
     </nav>
@@ -81,26 +81,23 @@
         <form action="/user/create" method="post">
             <!-- <div class="form-group"> -->
             <div class="row">
-                <div class="col-md-6">
+                
+                <div class="col-md-12">
                     <label for="userName">Naam</label>
                     <input type="text" name="userName" id="userName" placeholder="Naam" class="form-control mb-4">
-                    <!-- </div> -->
+                </div>
+                <div class="col-md-12">
+                    <label for="studentNumber">Studenten-nummer</label>
+                    <input type="text" name="studentNumber" id="studentNumber" placeholder="Studenten-nummer" class="form-control mb-4">
+                </div>
+                <div class="col-md-12">
+                    <label for="password">Wachtwoord</label>
+                    <input type="password" name="password" id="password" placeholder="Wachtwoord" class="form-control mb-4">
                 </div>
                 
-                </div>
-                <div class="col-md-6">
-                    <label for="studentNumber">studentNumber</label>
-                    <input type="text" name="studentNumber" id="studentNumber" placeholder="studentNumber" class="form-control mb-4">
-                </div>
-                <div class="col-md-6">
-                    <label for="password">password</label>
-                    <input type="password" name="password" id="password" placeholder="password" class="form-control mb-4">
-                </div>
-        
                 <div class="col-sm-12">
                     <button type="submit" class="btn btn-info btn-block my-3">Maak user</button>
                 </div>
-            </div>
         </form>
     </div>
 

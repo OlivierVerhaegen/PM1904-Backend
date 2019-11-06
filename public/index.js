@@ -14,6 +14,18 @@ $(document).ready(function() {
             toast.addClass('error');
             $('.toast-body').text('Failed to add database entry.');
         }
+        if (status == 'success-login') {
+            toast.addClass('success');
+            $('.toast-body').text('User logged in.');
+        }
+        if (status == 'error-login') {
+            toast.addClass('error');
+            $('.toast-body').text('Incorrect username and/or password!');
+        }
+        if (status == 'error-empty-login') {
+            toast.addClass('error');
+            $('.toast-body').text('Please enter username and password.');
+        }
     });
 
     // Fires when toast is finished being hidden.

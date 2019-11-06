@@ -8,43 +8,61 @@ const SQLConnection = require('../database');
 //--------------------------------------------------------------------------------------
 //                                         GET REQUESTS
 //--------------------------------------------------------------------------------------
+function getProducts() {
+    const queryString = 'SELECT * FROM products';
+    SQLConnection().query(queryString, (err, rows, fields) => {
+        if (err) {
+            logger.error('Failed to get products from database. ' + err);
+            return {
+                error: 'Failed to get products from database. ' + err
+            };
+        }
+
+        return rows;
+    });
+}
+
 router.get('/', (req, res) => {
     if (req.session.loggedin) {
         logger.info('Getting products from database...');
 
-        const queryString = 'SELECT * FROM products';
-        SQLConnection().query(queryString, (err, rows, fields) => {
-            if (err) {
-                logger.error('Failed to get products from database.');
-                res.sendStatus(500);
-                return;
-            }
-
-            res.json(rows);
-        });
+        res.json(getProducts());
     }
     else {
         logger.error('User is not logged in!');
+        res.status(401).json({
+            error: 'You need to be logged in to access products.'
+        });
+        res.end();
     }
 });
+
+function getProductById(id) {
+    const queryString = 'SELECT * FROM products WHERE id = ?';
+    SQLConnection().query(queryString, [id], (err, rows, fields) => {
+        if (err) {
+            logger.error('Failed to get product with id: ' + id + ' from database.');
+            return {
+                error: 'Failed to get product with id: ' + id + ' from database.'
+            };
+        }
+
+        return rows;
+    });
+}
 
 router.get('/:id', (req, res) => {
     if (req.session.loggedin) {
         logger.info(`Getting product ${req.params.id} from database...`);
 
-        const queryString = 'SELECT * FROM products WHERE id = ?';
-        SQLConnection().query(queryString, [req.params.id], (err, rows, fields) => {
-            if (err) {
-                logger.error('Failed to get product from database.');
-                res.sendStatus(500);
-                return;
-            }
-
-            res.json(rows);
-        });
+        res.json(getProductById(req.params.id));
     }
     else {
         logger.error('User is not logged in!');
+        res.status(401).json({
+            error: 'You need to be logged in to access products.'
+        });
+        res.end();
     }
 });
 
@@ -54,37 +72,49 @@ router.get('/:id', (req, res) => {
 //--------------------------------------------------------------------------------------
 router.post('/create', (req, res) => {
     if (req.session.loggedin) {
-        logger.info('Creating product: ' + req.body.name);
+        const name = req.body.name;
+        const price = req.body.price;
+        const photoUrl = req.body.photoUrl;
+        const allergens = req.body.allergens;
+        const description = req.body.description;
+        const available = req.body.available;
 
-        // Convert checkbox value to boolean.
-        if (req.body.available == 'on') {
-            req.body.available = true;
-        } else {
-            req.body.available = false;
+        if (!name || !price || !photoUrl || !description) {
+            res.redirect(500, '/?status=error');
+            logger.error('Failed to instert new product: some fields where empty.');
+            res.end();
+            return;
         }
+
+        logger.info('Creating product: ' + req.body.name);
 
         const queryString = 'INSERT INTO products (name, price, photoUrl, allergens, description, available) VALUES (?, ?, ?, ?, ?, ?)';
         SQLConnection().query(
             queryString,
-            [req.body.name,
-            req.body.price,
-            req.body.photoUrl,
-            req.body.allergens,
-            req.body.description,
-            req.body.available
+            [
+                name,
+                price,
+                photoUrl,
+                allergens,
+                description,
+                available
             ], (err, result, fields) => {
                 if (err) {
                     logger.error('Failed to insert new product: ' + err);
-                    res.status(500).redirect('/?status=error');
+                    res.redirect(500, '/?status=error');
                     return;
                 }
 
                 logger.success('Inserted new product with id: ' + result.insertId)
-                res.status(201).redirect('/?status=success');
+                res.redirect(201, '/?status=success');
             });
     }
     else {
         logger.error('User is not logged in!');
+        res.status(401).json({
+            error: 'You need to be logged in to access products.'
+        });
+        res.end();
     }
 });
 
@@ -94,31 +124,53 @@ router.post('/create', (req, res) => {
 //--------------------------------------------------------------------------------------
 router.patch('/:id', (req, res) => {
     if (req.session.loggedin) {
+        const name = req.body.name;
+        const price = req.body.price;
+        const photoUrl = req.body.photoUrl;
+        const allergens = req.body.allergens;
+        const description = req.body.description;
+        const available = req.body.available;
+
+        if (!name || !price || !photoUrl || !description) {
+            res.redirect('/?status=error');
+            logger.error('Failed to instert new product: some fields where empty.');
+            res.end();
+            return;
+        }
+
         logger.info('Updating product with id: ' + req.params.id);
 
-        const queryString = 'UPDATE products SET name = ?, available = ?, price = ? WHERE id = ?';
+        const queryString = 'UPDATE products SET name = ?, price = ?, photoUrl = ?, allergens = ?, description = ?, available = ? WHERE id = ?';
         SQLConnection().query(
             queryString,
             [
-                req.body.name,
-                req.body.available,
-                req.body.price,
+                name,
+                price,
+                photoUrl,
+                allergens,
+                description,
+                available,
                 req.params.id
             ],
             (err, result, fields) => {
                 if (err) {
                     logger.error('Failed to update product with id: ' + req.params.id);
-                    res.status(500).redirect('/?status=error');
+                    logger.error(err);
+                    res.redirect(500, '/?status=error');
                     return;
                 }
 
                 logger.success('Updated product with id: ' + req.params.id);
-                res.status(200).redirect('/?status=success');
+                res.redirect(201, '/?status=success');
             }
         );
     }
     else {
         logger.error('User is not logged in!');
+        res.status(401).json({
+            error: 'You need to be logged in to access products.'
+        });
+        res.end();
     }
 });
 
@@ -133,16 +185,21 @@ router.delete('/:id', (req, res) => {
         SQLConnection().query(queryString, [req.params.id], (err, result, fields) => {
             if (err) {
                 logger.error('Failed to delete product with id: ' + req.params.id);
-                res.status(500).redirect('/?status=error');
+                logger.error(err);
+                res.redirect(500, '/?status=error');
                 return;
             }
 
             logger.success('Deleted product with id: ' + req.params.id);
-            res.status(200).redirect('/?status=success');
+            res.redirect(200, '/?status=success');
         });
     }
     else {
         logger.error('User is not logged in!');
+        res.status(401).json({
+            error: 'You need to be logged in to access products.'
+        });
+        res.end();
     }
 });
 
