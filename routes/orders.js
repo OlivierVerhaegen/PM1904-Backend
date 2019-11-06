@@ -5,28 +5,35 @@ const router = express.Router();
 
 const SQLConnection = require('../database');
 
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+    host: 'smtp.mailtrap.io',
+    port: 2525,
+    auth: {
+        user: '02c321c1ea572a',
+        pass: '6b43d61b29d930'
+    }
+});
+
 //--------------------------------------------------------------------------------------
 //                                         GET REQUESTS
 //--------------------------------------------------------------------------------------
-function getOrders() {
-    const queryString = 'SELECT * FROM orders';
-    SQLConnection().query(queryString, (err, rows, fields) => {
-        if (err) {
-            logger.error('Failed to get orders from database.');
-            return {
-                error: 'Failed to get order from database.'
-            };
-        }
-
-        return rows;
-    });
-}
-
 router.get('/', (req, res) => {
     if (req.session.loggedin) {
         logger.info('Getting orders from database...');
 
-        res.json(getOrders());
+        const queryString = 'SELECT * FROM orders';
+        SQLConnection().query(queryString, (err, rows, fields) => {
+            if (err) {
+                logger.error('Failed to get orders from database.');
+                res.json({
+                    error: 'Failed to get order from database.'
+                });
+            }
+    
+            res.json(rows);
+        });
     }
     else {
         logger.error('User is not logged in!');
@@ -37,25 +44,21 @@ router.get('/', (req, res) => {
     }
 });
 
-function getOrdersById(id) {
-    const queryString = 'SELECT * FROM orders WHERE id = ?';
-    SQLConnection().query(queryString, [id], (err, rows, fields) => {
-        if (err) {
-            logger.error('Failed to get order with id ' + id + ' from database.');
-            return {
-                error: 'Failed to get order with id ' + id + ' from database.'
-            }
-        }
-
-        return rows;
-    });
-}
-
 router.get('/:id', (req, res) => {
     if (req.session.loggedin) {
         logger.info(`Getting order ${req.params.id} from database ...`)
 
-        res.json(getOrdersById(req.params.id));
+        const queryString = 'SELECT * FROM orders WHERE id = ?';
+        SQLConnection().query(queryString, [req.params.id], (err, rows, fields) => {
+            if (err) {
+                logger.error('Failed to get order with id ' + req.params.id + ' from database.');
+                res.json({
+                    error: 'Failed to get order with id ' + req.params.id + ' from database.'
+                });
+            }
+    
+            res.json(rows);
+        });
     }
     else {
         logger.error('User is not logged in!');
@@ -138,6 +141,32 @@ router.patch('/:id', (req, res) => {
             end();
             return;
         }
+
+        const getUserQueryString = 'SELECT studentNumber FROM user WHERE id IN (SELECT DISTINCT userId FROM orders WHERE id = ?)';
+        SQLConnection().query(getUserQueryString, [req.params.id], (err, rows, fields) => {
+            if (err) {
+                logger.error('Failed to get order with id ' + req.params.id + ' from database.');
+                res.json({
+                    error: 'Failed to get order with id ' + req.params.id + ' from database.'
+                });
+            }
+            
+            if (status == 'ready') {
+                logger.info('Sending mail.');
+                // Send e-mail.
+                const mailOptions = {
+                    from: '2743fdd7f3-cc499a@inbox.mailtrap.io',
+                    to: `${rows[0].studentNumber}@ap.be`,
+                    subject: `HAP bestelling: ${req.params.id}`,
+                    text: 'Uw bestelling bij HAP kan opgehaald worden.'
+                }
+
+                transporter.sendMail(mailOptions, (err, info) => {
+                    if (err) console.log(err);
+                    console.log(info);
+                });
+            }
+        });
     
         const queryString = 'UPDATE orders SET status = ?, quantity = ?, price = ? WHERE id = ?';
         SQLConnection().query(
@@ -169,6 +198,31 @@ router.patch('/:id', (req, res) => {
         });
         res.end();
     }
+});
+
+router.patch('complete/:id', (req, res) => {
+    logger.log('Completing order with id: ' + req.params.id);
+
+    const id = req.params.id;
+
+    const queryString = 'UPDATE orders SET status = ? WHERE id = ?';
+    SQLConnection().query(
+      queryString,
+      [
+        'ready',
+        id
+      ],
+      (err, result, fields) => {
+        if (err) {
+        logger.error('Failed to complete order with id: ' + req.params.id)
+        res.status(500).redirect('/?status=error');
+        return;
+        }
+
+        logger.success('Completed order with id: ' + req.params.id);
+        res.status(200).redirect('/?status=success');
+      }
+    );
 });
 
 

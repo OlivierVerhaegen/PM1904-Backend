@@ -15,6 +15,5 @@ try {
 }
 
 module.exports = () => {
-    console.log(credentials);
     return mysql.createPool(credentials);
 }
