@@ -5,6 +5,17 @@ const router = express.Router();
 
 const SQLConnection = require('../database');
 
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+    host: 'smtp.mailtrap.io',
+    port: 2525,
+    auth: {
+        user: '02c321c1ea572a',
+        pass: '6b43d61b29d930'
+    }
+});
+
 //--------------------------------------------------------------------------------------
 //                                         GET REQUESTS
 //--------------------------------------------------------------------------------------
@@ -130,6 +141,32 @@ router.patch('/:id', (req, res) => {
             end();
             return;
         }
+
+        const getUserQueryString = 'SELECT studentNumber FROM user WHERE id IN (SELECT DISTINCT userId FROM orders WHERE id = ?)';
+        SQLConnection().query(getUserQueryString, [req.params.id], (err, rows, fields) => {
+            if (err) {
+                logger.error('Failed to get order with id ' + req.params.id + ' from database.');
+                res.json({
+                    error: 'Failed to get order with id ' + req.params.id + ' from database.'
+                });
+            }
+            
+            if (status == 'ready') {
+                logger.info('Sending mail.');
+                // Send e-mail.
+                const mailOptions = {
+                    from: '2743fdd7f3-cc499a@inbox.mailtrap.io',
+                    to: `${rows[0].studentNumber}@ap.be`,
+                    subject: `HAP bestelling: ${req.params.id}`,
+                    text: 'Uw bestelling bij HAP kan opgehaald worden.'
+                }
+
+                transporter.sendMail(mailOptions, (err, info) => {
+                    if (err) console.log(err);
+                    console.log(info);
+                });
+            }
+        });
     
         const queryString = 'UPDATE orders SET status = ?, quantity = ?, price = ? WHERE id = ?';
         SQLConnection().query(
