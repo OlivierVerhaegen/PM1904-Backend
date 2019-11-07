@@ -195,27 +195,7 @@ router.delete('/:id', (req, res) => {
     }
 });
 
-//-----------------------------------------------------------------------------------
-//                          fetch requests for product list
-//-----------------------------------------------------------------------------------
 
-router.fetchRequest(() => {
-
-const response = await fetch('/products');
-if(!response.error){
-    var e =  Error('Network response was not ok.');
-    logger.info(e)
-}
-else{
-    logger.info('data fetched succesfully');
-}
-const data = await response.json();
-logger.info(JSON.stringify(myJson));
-
-
- 
-
-});
 
 
 
