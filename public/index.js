@@ -62,10 +62,10 @@ $(document).ready(function () {
             var tr;
             for (var i = 0; i < data.length; i++) {
                 tr = $('<tr/>');
-                tr.append("<td>" + "id : "  + data[i][0] + "</td>");
-                tr.append("<td>" + "name : "  + data[i][1] + "</td>");
-                tr.append("<td>" + "photoUrl : "  + data[i][2] + "</td>");
-                tr.append("<td>" + "allergens : "  + data[i][3] + "</td>");
+                tr.append("<td>" + "id : "  + data[i].id + "</td>");
+                tr.append("<td>" + "name : "  + data[i].name + "</td>");
+               // tr.append("<td>" + "photoUrl : "  + data[i].photoUrl + "</td>");
+                tr.append("<td>" + "allergens : "  + data[i].allergens + "</td>");
                 
 
                 $('table').append(tr);
