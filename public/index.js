@@ -1,11 +1,11 @@
-$(document).ready(function() {
+$(document).ready(function () {
     let urlParams = new URLSearchParams(window.location.search);
     let status = urlParams.get('status');
-    
+
     let toast = $('.toast');
 
     // Fires right when show toast is called.
-    toast.on('show.bs.toast', function() {
+    toast.on('show.bs.toast', function () {
         if (status == 'success') {
             toast.addClass('success');
             $('.toast-body').text('Successfully added database entry.');
@@ -29,7 +29,7 @@ $(document).ready(function() {
     });
 
     // Fires when toast is finished being hidden.
-    toast.on('hidden.bs.toast', function() {
+    toast.on('hidden.bs.toast', function () {
         if (toast.hasClass('success')) {
             toast.removeClass('success');
         }
@@ -41,4 +41,83 @@ $(document).ready(function() {
     if (status != null) {
         toast.toast('show');
     }
+
+
+
+    //-----------------------------------------------------------------------------------
+    //                          fetch requests for product list
+    //-----------------------------------------------------------------------------------
+
+
+        
+
+    fetch('/user')
+    .then(response => {
+        return response.json()
+    })
+    .then(data => {
+
+        var tr;
+        for (var i = 0; i < data.length; i++) {
+            tr = $('<tr/>');
+
+            
+            tr.append("<td>" + data[i].id + "</td>");
+            tr.append("<td>" + data[i].name + "</td>");
+            tr.append("<td>" + data[i].studentNumber + "</td>");
+
+
+            $('Ubody').append(tr);
+        }
+
+        console.log(data)
+    })
+      .catch(err => {});
+
+
+
+
+fetch('/products')
+    .then(response => {
+        return response.json()
+    })
+    .then(data => {
+
+        var tr;
+        for (var i = 0; i < data.length; i++) {
+            tr = $('<tr/>');
+
+            tr.append("<td>" + `<img src="${data[i].photoUrl}" alt="">` + "</td>");
+            tr.append("<td>" + data[i].id + "</td>");
+            tr.append("<td>" + data[i].name + "</td>");
+            tr.append("<td>" + data[i].allergens + "</td>");
+
+
+            $('tbody').append(tr);
+        }
+
+        console.log(data)
+    })
+      .catch(err => {});
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

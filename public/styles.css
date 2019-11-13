@@ -1,3 +1,4 @@
+
 .container{
     background-color: #e9ecef;
     height: 100%;
@@ -32,3 +33,31 @@ input{
     color: white;
     background-color: red;
 }
+
+.productList{
+    display: inline grid;
+    grid-template-areas:
+    'hd hd'
+    'tb tb';
+    width:82.5%;
+    background-color: #e9ecef;
+    margin-left :8.75%;
+
+
+}
+
+.productList > h1 {
+    grid-area: hd;
+
+}
+
+.productList > table {
+    padding: 1em;
+    margin: 3em;
+    grid-area: tb;
+    width: 100%;
+}
+
+
+
+
