@@ -50,81 +50,81 @@ $(document).ready(function () {
 
 
     fetch('/orders')
-    .then(response => {
-        return response.json()
-    })
-    .then(data => {
+        .then(response => {
+            return response.json()
+        })
+        .then(data => {
 
-        var tr;
-        for (var i = 0; i < data.length; i++) {
-            tr = $('<tr/>');
-
-            
-            tr.append("<td>" + data[i].id + "</td>");
-            tr.append("<td>" + data[i].productId + "</td>");
-            tr.append("<td>" + data[i].userId + "</td>");
-            tr.append("<td>" + data[i].dateTime + "</td>");
-            tr.append("<td>" + data[i].status + "</td>");
-            tr.append("<td>" + data[i].quantity + "</td>");
-            tr.append("<td>" + data[i].price + "</td>");
+            var tr;
+            for (var i = 0; i < data.length; i++) {
+                tr = $('<tr/>');
 
 
-            $('.orderTable').append(tr);
-        }
+                tr.append("<td>" + data[i].id + "</td>");
+                tr.append("<td>" + data[i].productId + "</td>");
+                tr.append("<td>" + data[i].userId + "</td>");
+                tr.append("<td>" + data[i].dateTime + "</td>");
+                tr.append("<td>" + data[i].status + "</td>");
+                tr.append("<td>" + data[i].quantity + "</td>");
+                tr.append("<td>" + data[i].price + "</td>");
 
-        console.log(data)
-    })
-      .catch(err => {});
-        
+
+                $('.orderTable').append(tr);
+            }
+
+            console.log(data)
+        })
+        .catch(err => { });
+
 
     fetch('/user')
-    .then(response => {
-        return response.json()
-    })
-    .then(data => {
+        .then(response => {
+            return response.json()
+        })
+        .then(data => {
 
-        var tr;
-        for (var i = 0; i < data.length; i++) {
-            tr = $('<tr/>');
-
-            
-            tr.append("<td>" + data[i].id + "</td>");
-            tr.append("<td>" + data[i].name + "</td>");
-            tr.append("<td>" + data[i].studentNumber + "</td>");
+            var tr;
+            for (var i = 0; i < data.length; i++) {
+                tr = $('<tr/>');
 
 
-            $('.userTable').append(tr);
-        }
-
-        console.log(data)
-    })
-      .catch(err => {});
+                tr.append("<td>" + data[i].id + "</td>");
+                tr.append("<td>" + data[i].name + "</td>");
+                tr.append("<td>" + data[i].studentNumber + "</td>");
 
 
+                $('.userTable').append(tr);
+            }
+
+            console.log(data)
+        })
+        .catch(err => { });
 
 
-fetch('/products')
-    .then(response => {
-        return response.json()
-    })
-    .then(data => {
-
-        var tr;
-        for (var i = 0; i < data.length; i++) {
-            tr = $('<tr/>');
-
-            tr.append("<td>" + `<img src="${data[i].photoUrl}" alt="">` + "</td>");
-            tr.append("<td>" + data[i].id + "</td>");
-            tr.append("<td>" + data[i].name + "</td>");
-            tr.append("<td>" + data[i].allergens + "</td>");
 
 
-            $('.productTable').append(tr);
-        }
+    fetch('/products')
+        .then(response => {
+            return response.json()
+        })
+        .then(data => {
 
-        console.log(data)
-    })
-      .catch(err => {});
+            var tr;
+            for (var i = 0; i < data.length; i++) {
+                tr = $('<tr/>');
+
+                tr.append("<td>" + `<img src="${data[i].photoUrl}" alt="">` + "</td>");
+                tr.append("<td>" + data[i].id + "</td>");
+                tr.append("<td>" + data[i].name + "</td>");
+                tr.append("<td>" + data[i].allergens + "</td>");
+
+
+                $('.productTable').append(tr);
+            }
+
+            console.log(data)
+        })
+        .catch(err => { });
 });
 
 
