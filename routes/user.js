@@ -168,6 +168,59 @@ router.delete('/:id', (req, res) => {
     });
 });
 
+//--------------------------------------------------------------------------------------
+//                                         GET REQUESTS
+//--------------------------------------------------------------------------------------
+router.get('/', (req, res) => {
+    if (req.session.loggedin) {
+        logger.info('Getting users from database...');
+
+        const queryString = 'SELECT * FROM user';
+        SQLConnection().query(queryString, (err, rows, fields) => {
+            if (err) {
+                logger.error('Failed to get user from database. ' + err);
+                res.json({
+                    error: 'Failed to get user from database. ' + err
+                });
+            }
+    
+            res.json(rows);
+        });
+    }
+    else {
+        logger.error('User is not logged in!');
+        res.status(401).json({
+            error: 'You need to be logged in to access users.'
+        });
+        res.end();
+    }
+});
+
+router.get('/:id', (req, res) => {
+    if (req.session.loggedin) {
+        logger.info(`Getting user ${req.params.id} from database...`);
+
+        const queryString = 'SELECT * FROM user WHERE id = ?';
+        SQLConnection().query(queryString, [req.params.id], (err, rows, fields) => {
+            if (err) {
+                logger.error('Failed to get user with id: ' + req.params.id + ' from database.');
+                res.json({
+                    error: 'Failed to get user with id: ' + req.params.id + ' from database.'
+                });
+            }
+    
+            res.json(rows);
+        });
+    }
+    else {
+        logger.error('User is not logged in!');
+        res.status(401).json({
+            error: 'You need to be logged in to access products.'
+        });
+        res.end();
+    }
+});
+
 
 
 
