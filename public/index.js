@@ -49,41 +49,65 @@ $(document).ready(function () {
     //-----------------------------------------------------------------------------------
 
 
+        
+
+    fetch('/user')
+    .then(response => {
+        return response.json()
+    })
+    .then(data => {
+
+        var tr;
+        for (var i = 0; i < data.length; i++) {
+            tr = $('<tr/>');
+
+            
+            tr.append("<td>" + data[i].id + "</td>");
+            tr.append("<td>" + data[i].name + "</td>");
+            tr.append("<td>" + data[i].studentNumber + "</td>");
+
+
+            $('Ubody').append(tr);
+        }
+
+        console.log(data)
+    })
+      .catch(err => {});
 
 
 
 
-    fetch('/products')
-        .then(response => {
-            return response.json()
-        })
-        .then(data => {
+fetch('/products')
+    .then(response => {
+        return response.json()
+    })
+    .then(data => {
 
-            var tr;
-            for (var i = 0; i < data.length; i++) {
-                tr = $('<tr/>');
-                tr.append("<td>" + "id : "  + data[i].id + "</td>");
-                tr.append("<td>" + "name : "  + data[i].name + "</td>");
-               // tr.append("<td>" + "photoUrl : "  + data[i].photoUrl + "</td>");
-                tr.append("<td>" + "allergens : "  + data[i].allergens + "</td>");
-                
+        var tr;
+        for (var i = 0; i < data.length; i++) {
+            tr = $('<tr/>');
 
-                $('table').append(tr);
-            }
-
-            console.log(data)
-        })
-        .catch(err => {
-
-        })
+            tr.append("<td>" + `<img src="${data[i].photoUrl}" alt="">` + "</td>");
+            tr.append("<td>" + data[i].id + "</td>");
+            tr.append("<td>" + data[i].name + "</td>");
+            tr.append("<td>" + data[i].allergens + "</td>");
 
 
+            $('tbody').append(tr);
+        }
 
-
-
-
-
+        console.log(data)
+    })
+      .catch(err => {});
 });
+
+
+
+
+
+
+
+
 
 
 

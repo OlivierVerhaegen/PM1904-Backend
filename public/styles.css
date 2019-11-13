@@ -35,11 +35,29 @@ input{
 }
 
 .productList{
-    display: flex;
-    justify-content: center;
-    width:100%;
+    display: inline grid;
+    grid-template-areas:
+    'hd hd'
+    'tb tb';
+    width:82.5%;
+    background-color: #e9ecef;
+    margin-left :8.75%;
+
 
 }
+
+.productList > h1 {
+    grid-area: hd;
+
+}
+
+.productList > table {
+    padding: 1em;
+    margin: 3em;
+    grid-area: tb;
+    width: 100%;
+}
+
 
 
 
