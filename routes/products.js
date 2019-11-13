@@ -19,7 +19,6 @@ router.get('/', (req, res) => {
                 error: 'Failed to get products from database. ' + err
             });
         }
-
         res.json(rows);
     });
 });
