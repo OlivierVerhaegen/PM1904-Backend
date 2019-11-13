@@ -9,53 +9,35 @@ const SQLConnection = require('../database');
 //                                         GET REQUESTS
 //--------------------------------------------------------------------------------------
 router.get('/', (req, res) => {
-    if (req.session.loggedin) {
-        logger.info('Getting products from database...');
+    logger.info('Getting products from database...');
 
-        const queryString = 'SELECT * FROM products';
-        SQLConnection().query(queryString, (err, rows, fields) => {
-            if (err) {
-                logger.error('Failed to get products from database. ' + err);
-                res.json({
-                    error: 'Failed to get products from database. ' + err
-                });
-            }
-    
-            res.json(rows);
-        });
-    }
-    else {
-        logger.error('User is not logged in!');
-        res.status(401).json({
-            error: 'You need to be logged in to access products.'
-        });
-        res.end();
-    }
+    const queryString = 'SELECT * FROM products';
+    SQLConnection().query(queryString, (err, rows, fields) => {
+        if (err) {
+            logger.error('Failed to get products from database. ' + err);
+            res.json({
+                error: 'Failed to get products from database. ' + err
+            });
+        }
+
+        res.json(rows);
+    });
 });
 
 router.get('/:id', (req, res) => {
-    if (req.session.loggedin) {
-        logger.info(`Getting product ${req.params.id} from database...`);
+    logger.info(`Getting product ${req.params.id} from database...`);
 
-        const queryString = 'SELECT * FROM products WHERE id = ?';
-        SQLConnection().query(queryString, [req.params.id], (err, rows, fields) => {
-            if (err) {
-                logger.error('Failed to get product with id: ' + req.params.id + ' from database.');
-                res.json({
-                    error: 'Failed to get product with id: ' + req.params.id + ' from database.'
-                });
-            }
-    
-            res.json(rows);
-        });
-    }
-    else {
-        logger.error('User is not logged in!');
-        res.status(401).json({
-            error: 'You need to be logged in to access products.'
-        });
-        res.end();
-    }
+    const queryString = 'SELECT * FROM products WHERE id = ?';
+    SQLConnection().query(queryString, [req.params.id], (err, rows, fields) => {
+        if (err) {
+            logger.error('Failed to get product with id: ' + req.params.id + ' from database.');
+            res.json({
+                error: 'Failed to get product with id: ' + req.params.id + ' from database.'
+            });
+        }
+
+        res.json(rows);
+    });
 });
 
 
@@ -194,5 +176,9 @@ router.delete('/:id', (req, res) => {
         res.end();
     }
 });
+
+
+
+
 
 module.exports = router;
