@@ -1,4 +1,5 @@
 
+
 .container{
     background-color: #e9ecef;
     height: 100%;
@@ -34,30 +35,28 @@ input{
     background-color: red;
 }
 
-.productList{
-    display: inline grid;
-    grid-template-areas:
-    'hd hd'
-    'tb tb';
-    width:82.5%;
-    background-color: #e9ecef;
-    margin-left :8.75%;
 
 
-}
-
-.productList > h1 {
-    grid-area: hd;
-
-}
-
-.productList > table {
-    padding: 1em;
-    margin: 3em;
-    grid-area: tb;
-    width: 100%;
+tbody{
+    display:block;
+    overflow:auto;
+    height:300px;
+    margin-left:auto;
+    margin-right:auto;
+    
 }
 
 
+thead{
+    display: block;
+    text-align:center;
+    
+    
+    
+}
+img{
+    height: 5rem !important;
+    width: 5rem !important;
+}
 
 

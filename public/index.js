@@ -49,6 +49,32 @@ $(document).ready(function () {
     //-----------------------------------------------------------------------------------
 
 
+    fetch('/orders')
+    .then(response => {
+        return response.json()
+    })
+    .then(data => {
+
+        var tr;
+        for (var i = 0; i < data.length; i++) {
+            tr = $('<tr/>');
+
+            
+            tr.append("<td>" + data[i].id + "</td>");
+            tr.append("<td>" + data[i].productId + "</td>");
+            tr.append("<td>" + data[i].userId + "</td>");
+            tr.append("<td>" + data[i].dateTime + "</td>");
+            tr.append("<td>" + data[i].status + "</td>");
+            tr.append("<td>" + data[i].quantity + "</td>");
+            tr.append("<td>" + data[i].price + "</td>");
+
+
+            $('.orderTable').append(tr);
+        }
+
+        console.log(data)
+    })
+      .catch(err => {});
         
 
     fetch('/user')
@@ -67,7 +93,7 @@ $(document).ready(function () {
             tr.append("<td>" + data[i].studentNumber + "</td>");
 
 
-            $('Ubody').append(tr);
+            $('.userTable').append(tr);
         }
 
         console.log(data)
@@ -93,7 +119,7 @@ fetch('/products')
             tr.append("<td>" + data[i].allergens + "</td>");
 
 
-            $('tbody').append(tr);
+            $('.productTable').append(tr);
         }
 
         console.log(data)
