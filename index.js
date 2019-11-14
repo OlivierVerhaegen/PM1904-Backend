@@ -21,7 +21,7 @@ app.use(session({
 	secret: 'uf5he0zu7sq3UNny72dza30dgzy',
 	resave: true,
     saveUninitialized: true,
-    cookie: { maxAge: 60000 }
+    cookie: { maxAge: 3600000 }
 }));
 
 // Setup orgin headers to allow all orgins.
