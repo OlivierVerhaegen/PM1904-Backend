@@ -20,6 +20,10 @@
         </ul>
     </nav>
 
+
+    <!--//OrderList//-->
+
+
     <div class="container" style="margin-top:30px;">
         <h1 class="display-4">Order List</h1>
         <div class="row" style="margin-top: 30px;">
@@ -34,6 +38,8 @@
                             <th scope="col">status : </th>
                             <th scope="col">quantity : </th>
                             <th scope="col">price : </th>
+                            <th scope="col">action : </th>
+
                         </tr>
                     </thead>
                     <tbody class="orderTable">
@@ -44,10 +50,20 @@
         </div>
     </div>
 
+    
+
+
+    <!--//Userlist//-->
+
+
     <div class="container" style="margin-top:30px;">
         <h1 class="display-4">User List</h1>
         <div class="row" style="margin-top: 30px;">
+            <div class="col-sm-12">
+                <button type="button" class="btn btn-primary modalButton" (click)="addUser(user)" data-toggle="modal"
+                    data-target="#modalUserAdd">User toevoegen</button></div>
             <div class="container">
+
                 <table class="table">
                     <thead>
                         <tr>
@@ -64,9 +80,70 @@
         </div>
     </div>
 
+
+
+    <!--Modal User Toevoegen-->
+
+    <div class="modal fade" id="modalUserAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <p>user toevoegen</p>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/user/create" method="post">
+                        <!-- <div class="form-group"> -->
+                        <div>
+
+                            <div>
+                                <label for="userName">Naam</label>
+                                <input type="text" name="userName" id="userName" placeholder="Naam"
+                                    class="form-control mb-4">
+                            </div>
+                            <div>
+                                <label for="studentNumber">Studenten-nummer</label>
+                                <input type="text" name="studentNumber" id="studentNumber"
+                                    placeholder="Studenten-nummer" class="form-control mb-4">
+                            </div>
+                            <div>
+                                <label for="password">Wachtwoord</label>
+                                <input type="password" name="password" id="password" placeholder="Wachtwoord"
+                                    class="form-control mb-4">
+                            </div>
+
+                            <div>
+                                <button type="submit" class="btn btn-info btn-block my-3">Maak user</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Sluiten</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!--//Product List//-->
+
+
+
     <div class="container" style="margin-top:30px;">
         <h1 class="display-4">Product List</h1>
         <div class="row" style="margin-top: 30px;">
+            <div class="col-sm-12">
+                <button type="button" class="btn btn-primary modalButton" (click)="addProduct(product)" data-toggle="modal"
+                    data-target="#modalProductAdd">Product toevoegen</button></div>
             <div class="container">
                 <table class="table">
                     <thead>
@@ -85,89 +162,74 @@
         </div>
     </div>
 
+    <!--modal product toevoegen-->
 
-    <div class="toast" data-delay="2500">
-        <div class="toast-header">
-            <strong class="mr-auto">HAP - Backend</strong>
-            <small>Just now</small>
-            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="toast-body">
-            <!-- Text added by jQuery -->
-        </div>
-    </div>
-
-    <div class="container">
-        <br>
-        <h4 class="display-8">Voeg producten toe aan HAP.</h4>
-        <hr>
-        <form action="/products/create" method="post">
-            <!-- <div class="form-group"> -->
-            <div class="row">
-                <div class="col-md-6">
-                    <label for="name">Naam</label>
-                    <input type="text" name="name" id="name" placeholder="Naam" class="form-control mb-4">
-                    <!-- </div> -->
+    <div class="modal fade" id="modalProductAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <p>Product toevoegen</p>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="col-md-6">
-                    <label for="available">Aantal</label>
-                    <input type="number" name="available" id="available" class="form-control mb-4">
+                <div class="modal-body">
+                    <div class="container">
+                    <form action="/products/create" method="post">
+                        <!-- <div class="form-group"> -->
+                        <div class="row">
+                            <div>
+                                <label for="name">Naam</label>
+                                <input type="text" name="name" id="name" placeholder="Naam" class="form-control">
+                                <!-- </div> -->
+                            </div>
+                            <div>
+                                <label for="available">Aantal</label>
+                                <input type="number" name="available" id="available" class="form-control">
 
 
+                            </div>
+                            <div>
+                                <label for="price">Prijs (€)</label>
+                                <input type="number" name="price" id="price" placeholder="Prijs"
+                                    class="form-control">
+                            </div>
+                            <div>
+                                <label for="photoUrl">Foto-url</label>
+                                <input type="url" name="photoUrl" id="photoUrl" placeholder="Foto url"
+                                    class="form-control">
+                            </div>
+                            <div>
+                                <label for="allergens">Allergenen</label>
+                                <textarea name="allergens" id="allergens" placeholder="Allergenen" cols="30" rows="10"
+                                    class="form-control"></textarea>
+                            </div>
+                            <div>
+                                <label for="description">Beschrijving</label>
+                                <textarea name="description" id="description" placeholder="Beschrijving" cols="30"
+                                    rows="10" class="form-control"></textarea>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-info btn-block">Maak product</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div class="col-md-6">
-                    <label for="price">Prijs (€)</label>
-                    <input type="number" name="price" id="price" placeholder="Prijs" class="form-control mb-4">
+
                 </div>
-                <div class="col-md-6">
-                    <label for="photoUrl">Foto-url</label>
-                    <input type="url" name="photoUrl" id="photoUrl" placeholder="Foto url" class="form-control mb-4">
-                </div>
-                <div class="col-md-6">
-                    <label for="allergens">Allergenen</label>
-                    <textarea name="allergens" id="allergens" placeholder="Allergenen" cols="30" rows="10"
-                        class="form-control mb-4"></textarea>
-                </div>
-                <div class="col-md-6">
-                    <label for="description">Beschrijving</label>
-                    <textarea name="description" id="description" placeholder="Beschrijving" cols="30" rows="10"
-                        class="form-control mb-4"></textarea>
-                </div>
-                <div class="col-sm-12">
-                    <button type="submit" class="btn btn-info btn-block my-3">Maak product</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Sluiten</button>
+
                 </div>
             </div>
-        </form>
-
-        <br>
-        <h4 class="display-8">Voeg users toe aan HAP.</h4>
-        <hr>
-        <form action="/user/create" method="post">
-            <!-- <div class="form-group"> -->
-            <div class="row">
-
-                <div class="col-md-12">
-                    <label for="userName">Naam</label>
-                    <input type="text" name="userName" id="userName" placeholder="Naam" class="form-control mb-4">
-                </div>
-                <div class="col-md-12">
-                    <label for="studentNumber">Studenten-nummer</label>
-                    <input type="text" name="studentNumber" id="studentNumber" placeholder="Studenten-nummer"
-                        class="form-control mb-4">
-                </div>
-                <div class="col-md-12">
-                    <label for="password">Wachtwoord</label>
-                    <input type="password" name="password" id="password" placeholder="Wachtwoord"
-                        class="form-control mb-4">
-                </div>
-
-                <div class="col-sm-12">
-                    <button type="submit" class="btn btn-info btn-block my-3">Maak user</button>
-                </div>
-        </form>
+        </div>
     </div>
+
+
+    
 
     <!-- Bootstrap js dependencies -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -184,3 +246,4 @@
 </body>
 
 </html>
+

@@ -67,8 +67,9 @@ $(document).ready(function () {
                 tr.append("<td>" + data[i].status + "</td>");
                 tr.append("<td>" + data[i].quantity + "</td>");
                 tr.append("<td>" + data[i].price + "</td>");
-                tr.append("<td>" + `<button onclick="orderReady(${data[i].id}, 'ready', ${data[i].quantity}, ${data[i].price})" type="button" class="btn btn-success">Ready</button>` + "</td>");
-
+                tr.append("<td>" + `<button onclick="orderReady(${data[i].id}, 'ready', ${data[i].quantity}, ${data[i].price})" type="button" class="btn btn-success">Ready</button>`+
+                `<button onclick="orderDelete(${data[i].id})" type="button" class="btn btn-danger">&times;</button>` + "</td>");
+                
                 $('.orderTable').append(tr);
             }
 
@@ -91,6 +92,7 @@ $(document).ready(function () {
                 tr.append("<td>" + data[i].id + "</td>");
                 tr.append("<td>" + data[i].name + "</td>");
                 tr.append("<td>" + data[i].studentNumber + "</td>");
+                tr.append("<td>" + `<button onclick="userDelete(${data[i].id})" type="button" class="btn btn-danger">&times;</button>` + "</td>");
 
 
                 $('.userTable').append(tr);
@@ -117,7 +119,7 @@ $(document).ready(function () {
                 tr.append("<td>" + data[i].id + "</td>");
                 tr.append("<td>" + data[i].name + "</td>");
                 tr.append("<td>" + data[i].allergens + "</td>");
-
+                tr.append("<td>" + `<button onclick="productDelete(${data[i].id})" type="button" class="btn btn-danger">&times;</button>` + "</td>");
 
                 $('.productTable').append(tr);
             }
@@ -139,6 +141,37 @@ function orderReady(orderId, status, quantity, price) {
     }).then(() => {
         window.location.replace("/?status=success");
     }).catch((err) => {
+        window.location.replace("/?status=error");
+    });
+}
+
+function userDelete(userId){
+    fetch(`/user/${userId}`,{
+        method:'DELETE'
+    }).then(() => {
+        window.location.replace("/?status=succes");
+    }).catch((err)=>{
+        window.location.replace("/?status=error");
+    });
+}
+
+
+function productDelete(productId){
+    fetch(`/products/${productId}`,{
+        method:'DELETE'
+    }).then(() => {
+        window.location.replace("/?status=succes");
+    }).catch((err)=>{
+        window.location.replace("/?status=error");
+    });
+}
+
+function orderDelete(orderId){
+    fetch(`/orders/${orderId}`,{
+        method:'DELETE'
+    }).then(() => {
+        window.location.replace("/?status=succes");
+    }).catch((err)=>{
         window.location.replace("/?status=error");
     });
 }
