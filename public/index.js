@@ -67,7 +67,7 @@ $(document).ready(function () {
                 tr.append("<td>" + data[i].status + "</td>");
                 tr.append("<td>" + data[i].quantity + "</td>");
                 tr.append("<td>" + data[i].price + "</td>");
-
+                tr.append("<td>" + `<button onclick="orderReady(${data[i].id}, 'ready', ${data[i].quantity}, ${data[i].price})" type="button" class="btn btn-success">Ready</button>` + "</td>");
 
                 $('.orderTable').append(tr);
             }
@@ -127,23 +127,18 @@ $(document).ready(function () {
         .catch(err => { });
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function orderReady(orderId, status, quantity, price) {
+    fetch(`/orders/${orderId}`, {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'PATCH',
+        body: JSON.stringify({
+            status: status,
+            quantity: quantity,
+            price: price
+        }),
+    }).then(() => {
+        window.location.replace("/?status=success");
+    }).catch((err) => {
+        window.location.replace("/?status=error");
+    });
+}
