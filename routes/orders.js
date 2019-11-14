@@ -138,7 +138,7 @@ router.patch('/:id', (req, res) => {
         if (!status || !quantity || !price) {
             res.redirect(500, '/?status=error');
             logger.error('Failed to instert new order: some fields where empty.');
-            end();
+            res.end();
             return;
         }
 
