@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 // Support the usage of sessions.
 app.use(session({
 	secret: 'uf5he0zu7sq3UNny72dza30dgzy',
-	resave: false,
+	resave: true,
     saveUninitialized: true,
     cookie: { maxAge: 60000 }
 }));
