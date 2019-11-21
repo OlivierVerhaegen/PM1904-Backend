@@ -24,11 +24,10 @@ before_script:
   NULL DEFAULT NULL, PRIMARY KEY (`id`) ) COLLATE='latin1_swedish_ci' ENGINE=InnoDB
   AUTO_INCREMENT=1 ;'
 before_deploy:
-- sudo apt-get update
 - sudo apt-get install -y sshpass
 deploy:
   provider: script
   skip_cleanup: true
-  script: sshpass -p "$PASSWORD" rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR $USER@$HOST:$DIRECTORY
+  script: sshpass -p "$PASSWORD" rsync -e "ssh -o StrictHostKeyChecking=no" -r --delete-after --quiet $TRAVIS_BUILD_DIR $USER@$HOST:$DIRECTORY
   on:
     branch: master
