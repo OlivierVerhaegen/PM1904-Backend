@@ -24,7 +24,8 @@ before_script:
   NULL DEFAULT NULL, PRIMARY KEY (`id`) ) COLLATE='latin1_swedish_ci' ENGINE=InnoDB
   AUTO_INCREMENT=1 ;'
 before_deploy:
-- apt-get install -y sshpass
+- sudo apt-get update
+- sudo apt-get install -y sshpass
 deploy:
   provider: script
   skip_cleanup: true
