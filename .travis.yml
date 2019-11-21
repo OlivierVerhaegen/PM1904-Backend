@@ -24,13 +24,14 @@ before_script:
   NULL DEFAULT NULL, PRIMARY KEY (`id`) ) COLLATE='latin1_swedish_ci' ENGINE=InnoDB
   AUTO_INCREMENT=1 ;'
 before_deploy:
-- openssl aes-256-cbc -K $encrypted_4ccdd47de661_key -iv $encrypted_4ccdd47de661_iv -in id_rsa.enc -out id_rsa -d
+- openssl aes-256-cbc -K $encrypted_4ccdd47de661_key -iv $encrypted_4ccdd47de661_iv
+  -in id_rsa.enc -out id_rsa -d
 - eval "$(ssh-agent -s)"
 - chmod 600 /tmp/id_rsa
 - ssh-add /tmp/id_rsa
 deploy:
- provider: script
- skip_cleanup: true
- script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR $USER@$HOST:$DIRECTORY
- on:
-  branch: master
+  provider: script
+  skip_cleanup: true
+  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR $USER@$HOST:$DIRECTORY
+  on:
+    branch: master
