@@ -23,16 +23,11 @@ before_script:
   `name` TEXT NOT NULL, `password` VARCHAR(30) NOT NULL, `studentNumber` VARCHAR(255)
   NULL DEFAULT NULL, PRIMARY KEY (`id`) ) COLLATE='latin1_swedish_ci' ENGINE=InnoDB
   AUTO_INCREMENT=1 ;'
-before_install:
-- openssl aes-256-cbc -K $encrypted_4ccdd47de661_key -iv $encrypted_4ccdd47de661_iv
-  -in id_rsa.enc -out id_rsa -d
 before_deploy:
-- eval "$(ssh-agent -s)"
-- chmod 600 /tmp/id_rsa
-- ssh-add /tmp/id_rsa
+- apt-get install -y sshpass
 deploy:
   provider: script
   skip_cleanup: true
-  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR $USER@$HOST:$DIRECTORY
+  script: sshpass -p "$PASSWORD" rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR $USER@$HOST:$DIRECTORY
   on:
     branch: master
