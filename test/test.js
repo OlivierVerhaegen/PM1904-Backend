@@ -110,7 +110,7 @@ describe('Testing order routes:', () => {
             server
             .post('/orders/create')
             .send({
-                productId: '0',
+                productId: ['0'],
                 userId: '0',
                 status: 'busy',
                 quantity: '5',

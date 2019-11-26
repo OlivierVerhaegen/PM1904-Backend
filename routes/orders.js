@@ -7,6 +7,8 @@ const SQLConnection = require('../database');
 
 const nodemailer = require('nodemailer');
 
+const uniqid = require('uniqid');
+
 const transporter = nodemailer.createTransport({
     host: 'smtp.mailtrap.io',
     port: 2525,
@@ -77,42 +79,49 @@ router.post('/create', (req, res) => {
     if (req.session.loggedin) {
         logger.info('Creating order');
 
+        const orderId = uniqid.time('order-');
         const productId = req.body.productId;
         const userId = req.body.userId;
         const status = req.body.status ? req.body.status : 'busy';
         const quantity = req.body.quantity;
         const price = req.body.price;
+
+        console.log(productId);
     
     
-        if (!productId || !userId || !status || !quantity || !price) {
+        if (!orderId || !productId || !userId || !status || !quantity || !price) {
             res.redirect(500, '/?status=error');
             logger.error('Failed to instert new order: some fields where empty.');
             res.end();
             return;
         }
-    
-        const queryString = 'INSERT INTO orders (productId, userId, status, quantity, price) VALUES (?, ?, ?, ?, ?)';
-        SQLConnection().query(
-            queryString,
-            [   
-                productId,
-                userId,
-                status,
-                quantity,
-                price
-            ],
-            (err, result, fields) => {
-                if (err) {
-                    logger.error('Failed to insert new order: ' + err);
-                    res.redirect(500, '/?status=error');
-                    res.end();
-                    return;
-                } 
-    
-                logger.success('Inserted new order with id: ' + result.insertId);
-                res.redirect(201 ,'/?status=success');
-            }
-        );
+
+        productId.forEach(pid => {
+            const queryString = 'INSERT INTO orders (orderId, productId, userId, status, quantity, price) VALUES (?, ?, ?, ?, ?, ?)';
+            SQLConnection().query(
+                queryString,
+                [   
+                    orderId,
+                    pid,
+                    userId,
+                    status,
+                    quantity,
+                    price
+                ],
+                (err, result, fields) => {
+                    if (err) {
+                        logger.error('Failed to insert new order: ' + err);
+                        res.redirect(500, '/?status=error');
+                        res.end();
+                        return;
+                    } 
+        
+                    logger.success('Inserted new order with id: ' + result.insertId);
+                }
+            );
+        });
+
+        res.redirect(201 ,'/?status=success');
     }
     else {
         logger.error('User is not logged in!');
@@ -141,32 +150,6 @@ router.patch('/:id', (req, res) => {
             res.end();
             return;
         }
-
-        const getUserQueryString = 'SELECT studentNumber FROM user WHERE id IN (SELECT DISTINCT userId FROM orders WHERE id = ?)';
-        SQLConnection().query(getUserQueryString, [req.params.id], (err, rows, fields) => {
-            if (err) {
-                logger.error('Failed to get order with id ' + req.params.id + ' from database.');
-                res.json({
-                    error: 'Failed to get order with id ' + req.params.id + ' from database.'
-                });
-            }
-            
-            if (status == 'ready') {
-                logger.info('Sending mail.');
-                // Send e-mail.
-                const mailOptions = {
-                    from: '2743fdd7f3-cc499a@inbox.mailtrap.io',
-                    to: `${rows[0].studentNumber}@ap.be`,
-                    subject: `HAP bestelling: ${req.params.id}`,
-                    text: 'Uw bestelling bij HAP kan opgehaald worden.'
-                }
-
-                transporter.sendMail(mailOptions, (err, info) => {
-                    if (err) console.log(err);
-                    console.log(info);
-                });
-            }
-        });
     
         const queryString = 'UPDATE orders SET status = ?, quantity = ?, price = ? WHERE id = ?';
         SQLConnection().query(
@@ -200,26 +183,52 @@ router.patch('/:id', (req, res) => {
     }
 });
 
-router.patch('complete/:id', (req, res) => {
-    logger.log('Completing order with id: ' + req.params.id);
+router.patch('/complete/:orderId', (req, res) => {
+    logger.info('Completing order with orderId: ' + req.params.orderId);
 
-    const id = req.params.id;
+    const orderId = req.params.orderId;
 
-    const queryString = 'UPDATE orders SET status = ? WHERE id = ?';
+    const queryString = 'UPDATE orders SET status = ? WHERE orderId = ?';
     SQLConnection().query(
       queryString,
       [
         'ready',
-        id
+        orderId
       ],
       (err, result, fields) => {
         if (err) {
-        logger.error('Failed to complete order with id: ' + req.params.id)
-        res.status(500).redirect('/?status=error');
-        return;
+            logger.error('Failed to complete order with id: ' + req.params.orderId)
+            res.status(500).redirect('/?status=error');
+            return;
         }
 
-        logger.success('Completed order with id: ' + req.params.id);
+        logger.success('Completed order with id: ' + req.params.orderId);
+
+        const getUserQueryString = 'SELECT studentNumber FROM user WHERE id IN (SELECT DISTINCT userId FROM orders WHERE orderId = ?)';
+        SQLConnection().query(getUserQueryString, [req.params.orderId], (err, rows, fields) => {
+            if (err) {
+                logger.error('Failed to get order with id ' + req.params.id + ' from database.');
+                res.json({
+                    error: 'Failed to get order with id ' + req.params.id + ' from database.'
+                });
+                return;
+            }
+            logger.info('Sending mail.');
+            console.log(rows);
+            // Send e-mail.
+            const mailOptions = {
+                from: '2743fdd7f3-cc499a@inbox.mailtrap.io',
+                to: `${rows[0].studentNumber}@ap.be`,
+                subject: `HAP bestelling: ${req.params.orderId}`,
+                text: 'Uw bestelling bij HAP kan opgehaald worden.'
+            }
+
+            transporter.sendMail(mailOptions, (err, info) => {
+                if (err) console.log(err);
+                console.log(info);
+            });
+        });
+
         res.status(200).redirect('/?status=success');
       }
     );

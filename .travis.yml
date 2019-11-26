@@ -1,54 +1,48 @@
 language: node_js
 node_js:
-  - "stable"
+- stable
 cache:
   directories:
-    - "node_modules"
+  - node_modules
 services:
-  - mysql
+- mysql
 before_script:
-  - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
-
-  - sudo mysql -e 'USE test; CREATE TABLE `orders` (
-      `id` INT(11) NOT NULL AUTO_INCREMENT,
-      `productId` INT(11) NOT NULL,
-      `userId` INT(11) NOT NULL,
-      `dateTime` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-      `status` VARCHAR(50) NULL,
-      `quantity` INT(11) NULL DEFAULT 0,
-      `price` DOUBLE UNSIGNED NULL DEFAULT 0,
-      PRIMARY KEY (`id`),
-      INDEX `Product_ID` (`productId`),
-      INDEX `Student_ID` (`userId`)
-    )
-    COLLATE='latin1_swedish_ci'
-    ENGINE=InnoDB
-    AUTO_INCREMENT=1
-    ;'
-
-  - sudo mysql -e 'USE test; CREATE TABLE `products` (
-      `id` INT(11) NOT NULL AUTO_INCREMENT,
-      `name` VARCHAR(255) NOT NULL,
-      `price` DOUBLE NOT NULL,
-      `photoUrl` TEXT NOT NULL,
-      `allergens` TEXT NOT NULL,
-      `description` TEXT NOT NULL,
-      `available` INT(11) NOT NULL DEFAULT 0,
-      PRIMARY KEY (`id`)
-    )
-    COLLATE='latin1_swedish_ci'
-    ENGINE=InnoDB
-    AUTO_INCREMENT=1
-    ;'
-
-  - sudo mysql -e 'USE test; CREATE TABLE `user` (
-      `id` INT(11) NOT NULL AUTO_INCREMENT,
-      `name` TEXT NOT NULL,
-      `password` VARCHAR(30) NOT NULL,
-      `studentNumber` VARCHAR(255) NULL DEFAULT NULL,
-      PRIMARY KEY (`id`)
-    )
-    COLLATE='latin1_swedish_ci'
-    ENGINE=InnoDB
-    AUTO_INCREMENT=1
-    ;'
+- sudo mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+- sudo mysql -e 'USE test; CREATE TABLE `orders` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`orderId` VARCHAR(50) NOT NULL,
+	`productId` INT(11) NOT NULL,
+	`userId` INT(11) NOT NULL,
+	`dateTime` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+	`status` VARCHAR(50) NULL DEFAULT 'busy',
+	`quantity` INT(11) NULL DEFAULT 0,
+	`price` DOUBLE UNSIGNED NULL DEFAULT 0,
+	PRIMARY KEY (`id`),
+	INDEX `Product_ID` (`productId`),
+	INDEX `Student_ID` (`userId`)
+)
+COLLATE='latin1_swedish_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=1
+;'
+- sudo mysql -e 'USE test; CREATE TABLE `products` ( `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL, `price` DOUBLE NOT NULL, `photoUrl` TEXT NOT NULL,
+  `allergens` TEXT NOT NULL, `description` TEXT NOT NULL, `available` INT(11) NOT
+  NULL DEFAULT 0, PRIMARY KEY (`id`) ) COLLATE='latin1_swedish_ci' ENGINE=InnoDB AUTO_INCREMENT=1
+  ;'
+- sudo mysql -e 'USE test; CREATE TABLE `user` ( `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` TEXT NOT NULL, `password` VARCHAR(30) NOT NULL, `studentNumber` VARCHAR(255)
+  NULL DEFAULT NULL, PRIMARY KEY (`id`) ) COLLATE='latin1_swedish_ci' ENGINE=InnoDB
+  AUTO_INCREMENT=1 ;'
+before_deploy:
+- sudo apt-get update
+- sudo apt-get install -y sshpass
+- ssh-keyscan $HOST >> ~/.ssh/known_hosts
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: sshpass -p "$PASSWORD" rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR $USER@$HOST:$DIRECTORY
+  on:
+    branch: master
+after_deploy:
+- sshpass -p "$PASSWORD" ssh -t $USER@$HOST "cd $DIRECTORY/PM1904-Backend; npm install;"
