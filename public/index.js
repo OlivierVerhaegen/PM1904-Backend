@@ -68,8 +68,14 @@ $(document).ready(function () {
                 tr.append("<td>" + data[i].status + "</td>");
                 tr.append("<td>" + data[i].quantity + "</td>");
                 tr.append("<td>" + data[i].price + "</td>");
-                tr.append("<td>" + `<button onclick="orderReady('${data[i].orderId}')" type="button" class="btn btn-success">Ready</button>`+
-                `<button onclick="orderDelete(${data[i].id})" type="button" class="btn btn-danger">&times;</button>` + "</td>");
+                if (data[i].status == 'busy') {
+                    tr.append("<td>" + `<button onclick="orderReady('${data[i].orderId}')" type="button" class="btn btn-success">Ready</button>`+
+                    `<button onclick="orderDelete(${data[i].id})" type="button" class="btn btn-danger">&times;</button>` + "</td>");
+                } else {
+                    tr.append("<td>" + `<button disabled onclick="orderReady('${data[i].orderId}')" type="button" class="btn btn-success">Ready</button>`+
+                    `<button onclick="orderDelete(${data[i].id})" type="button" class="btn btn-danger">&times;</button>` + "</td>");
+                }
+                
                 
                 $('.orderTable').append(tr);
             }
