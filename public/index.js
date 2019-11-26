@@ -61,13 +61,14 @@ $(document).ready(function () {
 
 
                 tr.append("<td>" + data[i].id + "</td>");
+                tr.append("<td>" + data[i].orderId + "</td>");
                 tr.append("<td>" + data[i].productId + "</td>");
                 tr.append("<td>" + data[i].userId + "</td>");
                 tr.append("<td>" + data[i].dateTime + "</td>");
                 tr.append("<td>" + data[i].status + "</td>");
                 tr.append("<td>" + data[i].quantity + "</td>");
                 tr.append("<td>" + data[i].price + "</td>");
-                tr.append("<td>" + `<button onclick="orderReady(${data[i].id}, 'ready', ${data[i].quantity}, ${data[i].price})" type="button" class="btn btn-success">Ready</button>`+
+                tr.append("<td>" + `<button onclick="orderReady('${data[i].orderId}')" type="button" class="btn btn-success">Ready</button>`+
                 `<button onclick="orderDelete(${data[i].id})" type="button" class="btn btn-danger">&times;</button>` + "</td>");
                 
                 $('.orderTable').append(tr);
@@ -129,15 +130,10 @@ $(document).ready(function () {
         .catch(err => { });
 });
 
-function orderReady(orderId, status, quantity, price) {
-    fetch(`/orders/${orderId}`, {
+function orderReady(orderId) {
+    fetch(`/orders/complete/${orderId}`, {
         headers: { 'Content-Type': 'application/json' },
         method: 'PATCH',
-        body: JSON.stringify({
-            status: status,
-            quantity: quantity,
-            price: price
-        }),
     }).then(() => {
         window.location.replace("/?status=success");
     }).catch((err) => {
