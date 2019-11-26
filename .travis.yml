@@ -8,12 +8,23 @@ services:
 - mysql
 before_script:
 - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
-- sudo mysql -e 'USE test; CREATE TABLE `orders` ( `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `productId` INT(11) NOT NULL, `userId` INT(11) NOT NULL, `dateTime` DATETIME NULL
-  DEFAULT current_timestamp() ON UPDATE current_timestamp(), `status` VARCHAR(50)
-  NULL, `quantity` INT(11) NULL DEFAULT 0, `price` DOUBLE UNSIGNED NULL DEFAULT 0,
-  PRIMARY KEY (`id`), INDEX `Product_ID` (`productId`), INDEX `Student_ID` (`userId`)
-  ) COLLATE='latin1_swedish_ci' ENGINE=InnoDB AUTO_INCREMENT=1 ;'
+- sudo mysql -e 'USE test; CREATE TABLE `orders` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `orderId` VARCHAR(50) NOT NULL,
+    `productId` INT(11) NOT NULL,
+    `userId` INT(11) NOT NULL,
+    `dateTime` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+    `status` VARCHAR(50) NULL,
+    `quantity` INT(11) NULL DEFAULT 0,
+    `price` DOUBLE UNSIGNED NULL DEFAULT 0,
+    PRIMARY KEY (`id`),
+    INDEX `Product_ID` (`productId`),
+    INDEX `Student_ID` (`userId`)
+  )
+  COLLATE='latin1_swedish_ci'
+  ENGINE=InnoDB
+  AUTO_INCREMENT=1
+  ;'
 - sudo mysql -e 'USE test; CREATE TABLE `products` ( `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL, `price` DOUBLE NOT NULL, `photoUrl` TEXT NOT NULL,
   `allergens` TEXT NOT NULL, `description` TEXT NOT NULL, `available` INT(11) NOT
