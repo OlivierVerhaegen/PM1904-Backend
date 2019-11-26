@@ -65,7 +65,11 @@ $(document).ready(function () {
                 tr.append("<td>" + data[i].productId + "</td>");
                 tr.append("<td>" + data[i].userId + "</td>");
                 tr.append("<td>" + data[i].dateTime + "</td>");
-                tr.append("<td>" + data[i].status + "</td>");
+                if (data[i].status == 'busy') {
+                    tr.append('<td style="color: red; font-size: 48px; text-align:center; line-height: 0;"> &bull; </td>');
+                } else {
+                    tr.append('<td style="color: green; font-size: 48px; text-align:center; line-height: 0;"> &bull; </td>');
+                }
                 tr.append("<td>" + data[i].quantity + "</td>");
                 tr.append("<td>" + data[i].price + "</td>");
                 if (data[i].status == 'busy') {
