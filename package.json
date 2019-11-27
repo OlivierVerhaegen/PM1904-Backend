@@ -21,6 +21,7 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "colors": "^1.4.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "mocha": "^6.2.2",
