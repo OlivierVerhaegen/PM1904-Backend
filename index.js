@@ -10,6 +10,8 @@ const routes = require('./routes');
 
 const app = express();
 
+const cors = require('cors');
+
 // Adds request logging.
 app.use(morgan('short'));
 // Support parsing of application/x-www-form-urlencoded post data
@@ -25,11 +27,13 @@ app.use(session({
 }));
 
 // Setup orgin headers to allow all orgins.
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+// app.use(function(req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+// });
+
+app.use(cors());
 
 // Register our routes.
 app.use(routes);
