@@ -43,6 +43,31 @@ router.post('/auth', function(req, res) {
 	}
 });
 
+router.post('/auth/frontend', function(req, res) {
+	var username = req.body.username;
+    var password = req.body.password;
+    
+	if (username && password) {
+        const queryString = 'SELECT * FROM user WHERE name = ? AND password = ?';
+		SQLConnection().query(queryString, [username, password], function(error, results, fields) {
+			if (results.length > 0) {
+				req.session.loggedin = true;
+				req.session.username = username;
+                logger.info('User logged in.');
+                res.sendStatus(200);
+			} else {
+                logger.error('Incorrect username and/or password!');
+                res.sendStatus(401);
+			}			
+			res.end();
+        });
+	} else {
+        logger.info('Please enter username and password.');
+        res.sendStatus(401);
+		res.end();
+	}
+});
+
 // logout
 router.get('/logout', function(req, res, next) {
     if (req.session) {
