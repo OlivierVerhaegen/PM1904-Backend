@@ -46,20 +46,33 @@ router.get('/', (req, res) => {
     }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:orderId', (req, res) => {
     if (req.session.loggedin) {
-        logger.info(`Getting order ${req.params.id} from database ...`)
+        logger.info(`Getting order ${req.params.orderId} from database ...`)
 
-        const queryString = 'SELECT * FROM orders WHERE id = ?';
-        SQLConnection().query(queryString, [req.params.id], (err, rows, fields) => {
+        const queryString = 'SELECT * FROM orders WHERE orderId = ?';
+        SQLConnection().query(queryString, [req.params.orderId], (err, rows, fields) => {
             if (err) {
-                logger.error('Failed to get order with id ' + req.params.id + ' from database.');
+                logger.error('Failed to get order with id ' + req.params.orderId + ' from database.');
                 res.json({
-                    error: 'Failed to get order with id ' + req.params.id + ' from database.'
+                    error: 'Failed to get order with id ' + req.params.orderId + ' from database.'
                 });
             }
+
+            let totalPrice = 0;
+
+            rows.forEach(product => {
+                totalPrice += product.price;
+            });
+            
     
-            res.json(rows);
+            const order = {
+                orderId: req.params.orderId,
+                totalPrice: totalPrice,
+                products: rows,
+            };
+
+            res.json(order);
         });
     }
     else {
