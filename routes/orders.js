@@ -47,7 +47,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:orderId', (req, res) => {
-    if (!req.session.loggedin) {
+    if (req.session.loggedin) {
         logger.info(`Getting order ${req.params.orderId} from database ...`)
 
         const queryString = 'SELECT * FROM orders WHERE orderId = ?';
