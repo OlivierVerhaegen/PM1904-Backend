@@ -74,7 +74,7 @@
         <h1 class="display-4">User List</h1>
         <div class="row" style="margin-top: 30px;">
             <div class="col-sm-12">
-                <button type="button" class="btn btn-primary modalButton" (click)="addUser(user)" data-toggle="modal"
+                <button type="button" class="btn btn-primary modalButton" data-toggle="modal"
                     data-target="#modalUserAdd">User toevoegen</button></div>
             <div class="container">
 
@@ -84,6 +84,7 @@
                             <th scope="col">userId: </th>
                             <th scope="col">UserName : </th>
                             <th scope="col">studentNumber : </th>
+                            <th scope="col">action : </th>
                         </tr>
                     </thead>
                     <tbody class="userTable">
@@ -156,7 +157,7 @@
         <h1 class="display-4">Product List</h1>
         <div class="row" style="margin-top: 30px;">
             <div class="col-sm-12">
-                <button type="button" class="btn btn-primary modalButton" (click)="addProduct(product)" data-toggle="modal"
+                <button type="button" class="btn btn-primary modalButton" data-toggle="modal"
                     data-target="#modalProductAdd">Product toevoegen</button></div>
             <div class="container">
                 <table class="table">
@@ -166,6 +167,7 @@
                             <th scope="col"> id: </th>
                             <th scope="col"> name : </th>
                             <th scope="col"> allergens : </th>
+                            <th scope="col">action : </th>
                         </tr>
                     </thead>
                     <tbody class="productTable">
@@ -228,6 +230,74 @@
                             </div>
                             <div>
                                 <button type="submit" class="btn btn-info btn-block">Maak product</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Sluiten</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!--modal product bewerken-->
+
+    <div class="modal fade" id="modalProductEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <p>Product bewerken</p>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                    <form id="formProductEdit" action="javascript:void(0);">
+                        <!-- <div class="form-group"> -->
+                        <div class="row">
+                            <div>
+                                <label for="name">Naam</label>
+                                <input type="text" name="name" id="nameEdit" placeholder="Naam" class="form-control">
+                                <!-- </div> -->
+                            </div>
+                            <div>
+                                <label for="available">Aantal</label>
+                                <input type="number" name="available" id="availableEdit" class="form-control">
+
+
+                            </div>
+                            <div>
+                                <label for="price">Prijs (€)</label>
+                                <input type="number" name="price" id="priceEdit" placeholder="Prijs"
+                                    class="form-control">
+                            </div>
+                            <div>
+                                <label for="photoUrl">Foto-url</label>
+                                <input type="url" name="photoUrl" id="photoUrlEdit" placeholder="Foto url"
+                                    class="form-control">
+                            </div>
+                            <div>
+                                <label for="allergens">Allergenen</label>
+                                <textarea name="allergens" id="allergensEdit" placeholder="Allergenen" cols="30" rows="10"
+                                    class="form-control"></textarea>
+                            </div>
+                            <div>
+                                <label for="description">Beschrijving</label>
+                                <textarea name="description" id="descriptionEdit" placeholder="Beschrijving" cols="30"
+                                    rows="10" class="form-control"></textarea>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-info btn-block">Bewerk product</button>
                             </div>
                         </div>
                     </form>

@@ -97,6 +97,7 @@ router.post('/create', (req, res) => {
 //--------------------------------------------------------------------------------------
 router.patch('/:id', (req, res) => {
     if (req.session.loggedin) {
+        console.log(req.body);
         const name = req.body.name;
         const price = req.body.price;
         const photoUrl = req.body.photoUrl;
