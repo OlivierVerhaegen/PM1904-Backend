@@ -1,3 +1,7 @@
+var users;
+var products;
+var orders;
+
 $(document).ready(function () {
     let urlParams = new URLSearchParams(window.location.search);
     let status = urlParams.get('status');
@@ -54,7 +58,7 @@ $(document).ready(function () {
             return response.json()
         })
         .then(data => {
-
+            orders = data;
             var tr;
             for (var i = 0; i < data.length; i++) {
                 tr = $('<tr/>');
@@ -94,7 +98,7 @@ $(document).ready(function () {
             return response.json()
         })
         .then(data => {
-
+            users = data;
             var tr;
             for (var i = 0; i < data.length; i++) {
                 tr = $('<tr/>');
@@ -103,7 +107,9 @@ $(document).ready(function () {
                 tr.append("<td>" + data[i].id + "</td>");
                 tr.append("<td>" + data[i].name + "</td>");
                 tr.append("<td>" + data[i].studentNumber + "</td>");
-                tr.append("<td>" + `<button onclick="userDelete(${data[i].id})" type="button" class="btn btn-danger">&times;</button>` + "</td>");
+                tr.append("<td>"
+                    + `<button onclick="userDelete(${data[i].id})" type="button" class="btn btn-danger">&times;</button>`
+                    + "</td>");
 
 
                 $('.userTable').append(tr);
@@ -121,7 +127,7 @@ $(document).ready(function () {
             return response.json()
         })
         .then(data => {
-
+            products = data;
             var tr;
             for (var i = 0; i < data.length; i++) {
                 tr = $('<tr/>');
@@ -130,7 +136,11 @@ $(document).ready(function () {
                 tr.append("<td>" + data[i].id + "</td>");
                 tr.append("<td>" + data[i].name + "</td>");
                 tr.append("<td>" + data[i].allergens + "</td>");
-                tr.append("<td>" + `<button onclick="productDelete(${data[i].id})" type="button" class="btn btn-danger">&times;</button>` + "</td>");
+                tr.append("<td>"
+                    + `<button onclick="productEdit(${i})" type="button" class="btn btn-primary" data-toggle="modal"
+                    data-target="#modalProductEdit">Edit</button>`
+                    + `<button onclick="productDelete(${data[i].id})" type="button" class="btn btn-danger">&times;</button>`
+                    + "</td>");
 
                 $('.productTable').append(tr);
             }
@@ -155,7 +165,7 @@ function userDelete(userId){
     fetch(`/user/${userId}`,{
         method:'DELETE'
     }).then(() => {
-        window.location.replace("/?status=succes");
+        window.location.replace("/?status=success");
     }).catch((err)=>{
         window.location.replace("/?status=error");
     });
@@ -166,7 +176,7 @@ function productDelete(productId){
     fetch(`/products/${productId}`,{
         method:'DELETE'
     }).then(() => {
-        window.location.replace("/?status=succes");
+        window.location.replace("/?status=success");
     }).catch((err)=>{
         window.location.replace("/?status=error");
     });
@@ -176,8 +186,58 @@ function orderDelete(orderId){
     fetch(`/orders/${orderId}`,{
         method:'DELETE'
     }).then(() => {
-        window.location.replace("/?status=succes");
+        window.location.replace("/?status=success");
     }).catch((err)=>{
+        window.location.replace("/?status=error");
+    });
+}
+
+function productEdit(productIndex) {
+    let modal = document.querySelector('#modalProductEdit');
+    let product = products[productIndex];
+
+    modal.querySelector('#formProductEdit').onsubmit = () => {
+        updateProduct(product.id);
+    }
+    modal.querySelector('#nameEdit').value = product.name;
+    modal.querySelector('#availableEdit').value = product.available;
+    modal.querySelector('#priceEdit').value = product.price;
+    modal.querySelector('#photoUrlEdit').value = product.photoUrl;
+    modal.querySelector('#allergensEdit').value = product.allergens;
+    modal.querySelector('#descriptionEdit').value = product.description;  
+}
+
+function updateProduct(id) {
+    let product = {
+        name: '',
+        available: '',
+        price: '',
+        photoUrl: '',
+        allergens: '',
+        description: ''
+    }
+
+    let modal = document.querySelector('#modalProductEdit');
+    product.name = modal.querySelector('#nameEdit').value;
+    product.available = modal.querySelector('#availableEdit').value;
+    product.price = modal.querySelector('#priceEdit').value;
+    product.photoUrl = modal.querySelector('#photoUrlEdit').value;
+    product.allergens = modal.querySelector('#allergensEdit').value;
+    product.description = modal.querySelector('#descriptionEdit').value;  
+
+    console.log(product);
+
+    
+
+    fetch(`products/${id}`, {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'PATCH',
+        body: JSON.stringify(product)
+    }).then(() => {
+        modal.classList.remove('show');
+        window.location.replace("/?status=success");
+    }).catch((err)=>{
+        modal.classList.remove('show');
         window.location.replace("/?status=error");
     });
 }
