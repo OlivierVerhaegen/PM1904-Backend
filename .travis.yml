@@ -45,4 +45,4 @@ deploy:
   on:
     branch: master
 after_deploy:
-- sshpass -p "$PASSWORD" ssh -t $USER@$HOST "cd $DIRECTORY/PM1904-Backend; npm install;"
+- sshpass -p "$PASSWORD" ssh -t $USER@$HOST "cd $DIRECTORY/PM1904-Backend; cp ../credentials.js .;"
