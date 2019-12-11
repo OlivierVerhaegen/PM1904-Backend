@@ -2,6 +2,7 @@ const logger = require('../logger');
 const express = require('express');
 const router = express.Router();
 const session = require('express-session');
+const jwt = require('jsonwebtoken');
 
 const SQLConnection = require('../database');
 
@@ -54,7 +55,13 @@ router.post('/auth/frontend', function(req, res) {
 				req.session.loggedin = true;
 				req.session.username = username;
                 logger.info('User logged in.');
-                res.sendStatus(200);
+
+                let token = jwt.sign(
+                    {userName: username},
+                    'putin-is-boss',
+                    {expiresIn: '1h'}
+                )
+                res.json(token);
 			} else {
                 logger.error('Incorrect username and/or password!');
                 res.sendStatus(401);
