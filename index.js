@@ -33,10 +33,7 @@ app.use(session({
 //     next();
 // });
 
-app.use(cors({
-    origin: ["https://ea-ict.be", "http://localhost:4200"],
-    credentials: true
-}));
+app.use(cors());
 
 // Register our routes.
 app.use(routes);
