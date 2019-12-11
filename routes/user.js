@@ -75,6 +75,15 @@ router.post('/auth/frontend', function(req, res) {
 	}
 });
 
+router.get('/testtoken', function(req, res) {
+    let token = jwt.sign(
+        {test: 'testToken'},
+        'putin-is-boss',
+        {expiresIn: '1h'}
+    )
+    res.json(token);
+});
+
 // logout
 router.get('/logout', function(req, res, next) {
     if (req.session) {
