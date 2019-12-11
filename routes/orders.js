@@ -89,60 +89,51 @@ router.get('/:orderId', (req, res) => {
 //                                         POST REQUESTS
 //--------------------------------------------------------------------------------------
 router.post('/create', (req, res) => {
-    if (req.session.loggedin) {
-        logger.info('Creating order');
+    logger.info('Creating order');
 
-        const orderId = uniqid.time('order-');
-        const productId = req.body.productId;
-        const userId = req.body.userId;
-        const status = req.body.status ? req.body.status : 'busy';
-        const quantity = req.body.quantity;
-        const price = req.body.price;
+    const orderId = uniqid.time('order-');
+    const productId = req.body.productId;
+    const userId = req.body.userId;
+    const status = req.body.status ? req.body.status : 'busy';
+    const quantity = req.body.quantity;
+    const price = req.body.price;
 
-        console.log(productId);
-    
-    
-        if (!orderId || !productId || !userId || !status || !quantity || !price) {
-            res.redirect(500, '/?status=error');
-            logger.error('Failed to instert new order: some fields where empty.');
-            res.end();
-            return;
-        }
+    console.log(productId);
 
-        productId.forEach(pid => {
-            const queryString = 'INSERT INTO orders (orderId, productId, userId, status, quantity, price) VALUES (?, ?, ?, ?, ?, ?)';
-            SQLConnection().query(
-                queryString,
-                [   
-                    orderId,
-                    pid,
-                    userId,
-                    status,
-                    quantity,
-                    price
-                ],
-                (err, result, fields) => {
-                    if (err) {
-                        logger.error('Failed to insert new order: ' + err);
-                        res.redirect(500, '/?status=error');
-                        res.end();
-                        return;
-                    } 
-        
-                    logger.success('Inserted new order with id: ' + result.insertId);
-                }
-            );
-        });
 
-        res.redirect(201 ,'/?status=success');
-    }
-    else {
-        logger.error('User is not logged in!');
-        res.status(401).json({
-            error: 'You need to be logged in to access orders.'
-        });
+    if (!orderId || !productId || !userId || !status || !quantity || !price) {
+        res.redirect(500, '/?status=error');
+        logger.error('Failed to instert new order: some fields where empty.');
         res.end();
+        return;
     }
+
+    productId.forEach(pid => {
+        const queryString = 'INSERT INTO orders (orderId, productId, userId, status, quantity, price) VALUES (?, ?, ?, ?, ?, ?)';
+        SQLConnection().query(
+            queryString,
+            [   
+                orderId,
+                pid,
+                userId,
+                status,
+                quantity,
+                price
+            ],
+            (err, result, fields) => {
+                if (err) {
+                    logger.error('Failed to insert new order: ' + err);
+                    res.redirect(500, '/?status=error');
+                    res.end();
+                    return;
+                } 
+    
+                logger.success('Inserted new order with id: ' + result.insertId);
+            }
+        );
+    });
+
+    res.redirect(201 ,'/?status=success');
 })
 
 //--------------------------------------------------------------------------------------
