@@ -10,6 +10,9 @@ const router = express.Router();
 router.use('/login', (req, res) => {
     res.sendFile('login.html', {root: path.join(__dirname, '../public')});
 })
+router.use('/status', (req, res) => {
+    res.sendFile('status.html', {root: path.join(__dirname, '../public')});
+})
 
 router.use('/products', productRoutes);
 router.use('/orders', orderRoutes);
